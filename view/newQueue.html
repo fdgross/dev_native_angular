@@ -1,0 +1,342 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#!/queues">
+                <i class="fa fa-user-friends"></i> Filas
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" ng-show="queue.id">Editar File {{queue.name}}</li>
+        <li class="breadcrumb-item active" aria-current="page" ng-hide="queue.id">Nova Fila</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="queueForm">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                <div class="col-sm-4">
+                    <input class="form-control" type="text" ng-model="queue.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+                <label for="extension" class="col-sm-2 col-form-label">Ramal:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" ng-model="queue.extension" ng-required="true" name="extension" placeholder="Ramal" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="description" class="col-sm-2 col-form-label">Descrição:</label>
+                <div class="col-sm-6">
+                    <textarea class="form-control" ng-model="queue.description" name="description" placeholder="Descrição"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="monitor" class="col-sm-2 col-form-label">Gravar ligações:</label>
+                <div class="col-sm-6 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <label class="control control-radio">
+                        Não
+                        <input type="radio" id="monitorFalse" ng-model="queue.monitor" data-ng-value="false" ng-checked="!queue.monitor">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-radio">
+                        Sim
+                        <input type="radio" id="monitorTrue" ng-model="queue.monitor" data-ng-value="true" >
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row" ng-show="queue.monitor === true">
+                <label for="monitorInherit" class="col-sm-2 col-form-label">Gravação após transferência:</label>
+                <div class="col-sm-6 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <label class="control control-radio">
+                        Manter no mesmo arquivo
+                        <input type="radio" id="no" ng-model="queue.monitorInherit" data-ng-value="true">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-radio">
+                        Arquivos separados
+                        <input type="radio" id="outbound" ng-model="queue.monitorInherit" data-ng-value="false" ng-checked="!queue.monitorInherit">
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="callcenter" class="col-sm-2 col-form-label">CallCenter:</label>
+                <div class="col-sm-6 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <label class="control control-radio">
+                        Não
+                        <input type="radio" id="no" ng-model="queue.callcenter" value="no" ng-checked="!queue.callcenter || queue.callcenter === 'no'">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-radio">
+                        Ativo
+                        <input type="radio" id="outbound" ng-model="queue.callcenter" value="outbound">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-radio">
+                        Receptivo
+                        <input type="radio" id="default" ng-model="queue.callcenter" value="inbound">
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="moh" class="col-sm-2 col-form-label">Música de Espera:</label>
+                <div class="col-sm-6">
+                    <select class="form-control" ng-model="queue.mohId" ng-options="moh.id as moh.name for moh in mohs | orderBy:'name'"
+                        name="moh">
+                        <option value="">Selecione uma Música de Espera</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="strategy" class="col-sm-2 col-form-label">Estratégia:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" ng-model="queue.strategy" name="strategy">
+                        <option value="">Selecione uma Estratégia</option>
+                        <option value="random">Aleatório</option>
+                        <option value="linear">Linear</option>
+                        <option value="leastrecent">Menos Recente</option>
+                        <option value="fewestcalls">Menos Chamadas</option>
+                        <option value="rrmemory">Rotacionado</option>
+                        <option value="ringall">Todos os Ramais</option>
+                    </select>
+                </div>
+                <label for="ringTimeout" class="col-sm-2 col-form-label">Tempo chamando:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" ng-model="queue.ringTimeout" name="ringTimeout" placeholder="Timeout" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ringTone" class="col-sm-2 col-form-label">Tom de Ring:</label>
+                <div class="col-sm-6 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <label class="control control-radio">
+                        Nunca
+                        <input type="radio" id="never" ng-model="queue.ringTone" value="never" ng-checked="!queue.ringTone">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-radio">
+                        Sempre
+                        <input type="radio" id="outbound" ng-model="queue.ringTone" value="always">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-radio">
+                        Enquanto chama o ramal
+                        <input type="radio" id="default" ng-model="queue.ringTone" value="ring">
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="announce" class="col-sm-2 col-form-label">Anúncios:</label>
+                <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <div class="form-group row">
+                        <div class="col-sm-5">
+                            <label class="control control-checkbox">
+                                Tempo estimado de espera
+                                <input type="checkbox" id="announceHoldtime" ng-model="queue.announceHoldtime" value="true">
+                                <div class="control_indicator"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <label class="control control-checkbox">
+                                Posição na fila
+                                <input type="checkbox" id="announcePosition" ng-model="queue.announcePosition" value="true">
+                                <div class="control_indicator"></div>
+                            </label>
+                        </div>
+                        <div class="col-sm-4" ng-show="queue.announcePosition">
+                            <input class="form-control" type="text" ng-model="queue.announceFrequency" name="announceFrequency" placeholder="Frequência"/>
+                        </div>
+                    </div>            
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <label class="control control-checkbox">
+                                Periódico
+                                <input type="checkbox" id="periodicAnnounce" ng-model="queue.periodicAnnounce" value="true">
+                                <div class="control_indicator"></div>
+                            </label>
+                        </div>
+                        <div class="col-sm-4" ng-show="queue.periodicAnnounce">
+                            <input class="form-control" type="text" ng-model="queue.periodicAnnounceAudio" name="periodicAnnounceAudio" placeholder="Áudio"/>
+                        </div>
+                        <div class="col-sm-4" ng-show="queue.periodicAnnounce">
+                            <input class="form-control" type="text" ng-model="queue.periodicAnnounceFrequency" name="periodicAnnounceFrequency" placeholder="Frequência"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="announce" class="col-sm-2 col-form-label">Transbordo:</label>
+                <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label for="overflowExtension" class="col-form-label">Ramal de destino:</label>
+                        </div>
+                        <div class="col-sm-2">
+                            <input class="form-control" type="text" ng-model="queue.overflowExtension" name="overflowExtension" placeholder="Ramal" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="control control-checkbox">
+                                Quando atingir um timeout
+                                <input type="checkbox" id="chkQueueTimeout" ng-model="queue.chkQueueTimeout" ng-checked="queue.queueTimeout">
+                                <div class="control_indicator"></div>
+                            </label>
+                        </div>
+                        <div class="col-sm-3" ng-show="queue.chkQueueTimeout">
+                            <label for="queueTimeout" class="col-form-label">Timeout da fila:</label>
+                        </div>
+                        <div class="col-sm-2" ng-show="queue.chkQueueTimeout">
+                            <input class="form-control" type="text" ng-model="queue.queueTimeout" name="queueTimeout" placeholder="Timeout" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="control control-checkbox">
+                                Quando atingir um tamanho máximo
+                                <input type="checkbox" id="chkQueueMaxSize" ng-model="queue.chkQueueMaxSize" ng-checked="queue.queueMaxSize">
+                                <div class="control_indicator"></div>
+                            </label>
+                        </div>
+                        <div class="col-sm-3" ng-show="queue.chkQueueMaxSize">
+                            <label for="queueMaxSize" class="col-form-label">Tamanho da fila:</label>
+                        </div>
+                        <div class="col-sm-2" ng-show="queue.chkQueueMaxSize">
+                            <input class="form-control" type="text" ng-model="queue.queueMaxSize" name="queueMaxSize" placeholder="Tamanho" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="control control-checkbox">
+                                Quando não houver agentes disponíveis
+                                <input type="checkbox" id="joinEmpty" ng-model="queue.joinEmpty" data-ng-value="true">
+                                <div class="control_indicator"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="announce" class="col-sm-2 col-form-label">Membros:</label>
+                <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <div class="row">
+                        <div ng-repeat="(listName, list) in modelPeers.lists" class="col-md-6" ng-if="!queue.callcenter || queue.callcenter==='no'">
+                            <div class="panel panel-info">
+                                <div class="panel-heading" ng-if="listName === 'peersAvail'">
+                                    <b>Ramais</b>
+                                </div>
+                                <div class="panel-heading" ng-if="listName === 'peersSelected'">
+                                    <b>Selecionados</b>
+                                </div>
+                                <ul class="list-group dnd-list" dnd-list="list" dnd-allowed-types="modelPeers.allowedTypes">
+                                    <li class="list-group-item" ng-repeat="item in list"
+                                        dnd-draggable="item"
+                                        dnd-type="modelPeers.type"
+                                        dnd-moved="list.splice($index, 1)"
+                                        dnd-effect-allowed="move"
+                                        dnd-selected="modelPeers.selected = item"
+                                        ng-class="{'selected': modelPeers.selected === item}"
+                                    >
+                                    <i class="fa fa-bars"></i> {{item.username}} - {{item.name | ellipsis:20}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div ng-repeat="(listName, list) in modelUsers.lists" class="col-md-6" ng-if="queue.callcenter && queue.callcenter !== 'no'">
+                            <div class="panel panel-info">
+                                <div class="panel-heading" ng-if="listName === 'usersAvail'">
+                                    <b>Agentes</b>
+                                </div>
+                                <div class="panel-heading" ng-if="listName === 'usersSelected'">
+                                    <b>Selecionados</b>
+                                </div>
+                                <ul class="list-group dnd-list" dnd-list="list" dnd-allowed-types="modelUsers.allowedTypes">
+                                    <li class="list-group-item" ng-repeat="item in list"
+                                        dnd-draggable="item"
+                                        dnd-type="modelUsers.type"
+                                        dnd-moved="list.splice($index, 1)"
+                                        dnd-effect-allowed="move"
+                                        dnd-selected="modelUsers.selected = item"
+                                        ng-class="{'selected': modelUsers.selected === item}"
+                                    >
+                                    <i class="fa fa-bars"></i> {{item.username}} - {{item.name | ellipsis:20}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="announce" class="col-sm-2 col-form-label">Regras Customizadas:</label>
+                <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <div class="row">
+                        <div ng-repeat="(listName, list) in modelIvrs.lists" class="col-md-6" ng-class="{'col-md-12': listName === 'ivrsAvail'}">
+                            <div class="panel panel-info">
+                                <div class="panel-heading" ng-if="listName === 'ivrsAvail'">
+                                    <b>Regras Disponíveis</b>
+                                </div>
+                                <div class="panel-heading" ng-if="listName === 'ivrsSelectedBefore'">
+                                    <br><b>Executar antes da fila</b>
+                                </div>
+                                <div class="panel-heading" ng-if="listName === 'ivrsSelectedAfter'">
+                                    <br><b>Executar após a fila</b>
+                                </div>
+                                <ul class="list-group dnd-list" dnd-list="list" dnd-allowed-types="modelIvrs.allowedTypes">
+                                    <li class="list-group-item" ng-repeat="item in list"
+                                        dnd-draggable="item"
+                                        dnd-type="item.type"
+                                        dnd-moved="list.splice($index, 1)"
+                                        dnd-effect-allowed="move"
+                                        dnd-selected="modelIvrs.selected = item"
+                                        ng-class="{'selected': modelIvrs.selected === item}"
+                                    >
+                                    <i class="fa fa-bars"></i> {{item.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div ng-show="queueForm.name.$dirty" ng-messages="queueForm.name.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo nome!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo nome deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        <div ng-show="queueForm.extension.$dirty" ng-messages="queueForm.extension.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo ramal!
+            </div>
+        </div>
+
+        <hr/>
+        <div class="col-sm-6">
+            <button ng-show="{{queue.id}}" class="btn btn-primary" ng-click="editQueue(queue)" ng-disabled="queueForm.$invalid">Salvar</button>
+            <button ng-hide="{{queue.id}}" class="btn btn-primary" ng-click="addQueue(queue)" ng-disabled="queueForm.$invalid">Salvar</button>
+            <a class="btn btn-secondary" href="#!queues">Voltar</a>
+        </div>
+        <br>
+        <div ng-show="queue.id" class="alert alert-primary" role="alert">
+            Fila criada em '{{queue.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{queue.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+        </div>
+    </div>
+</div>

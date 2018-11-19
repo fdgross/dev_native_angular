@@ -1,0 +1,206 @@
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#!/trunks">
+                    <i class="fa fa-exchange-alt"></i> Troncos
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" ng-show="trunk.id">Editar Tronco '{{trunk.name}}'</li>
+            <li class="breadcrumb-item active" aria-current="page" ng-hide="trunk.id">Novo Tronco</li>
+        </ol>
+    </nav>
+    <div class="main">
+        <div class="container">
+            <form name="trunkForm">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="text" ng-model="trunk.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                            ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="protocol" class="col-sm-2 col-form-label">Protocolo:</label>
+                    <div class="col-sm-6 border" style="padding-bottom: 10px; padding-top: 10px;">
+                        <label class="control control-radio">
+                            Khomp
+                            <input type="radio" id="no" ng-model="trunk.type" value="KHOMP">
+                            <div class="control_indicator"></div>
+                        </label>
+                        <label class="control control-radio">
+                            SIP
+                            <input type="radio" id="outbound" ng-model="trunk.type" value="SIP">
+                            <div class="control_indicator"></div>
+                        </label>
+                        <label class="control control-radio">
+                            IAX
+                            <input type="radio" id="default" ng-model="trunk.type" value="IAX2">
+                            <div class="control_indicator"></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group row" ng-if="trunk.type === 'KHOMP'">
+                    <label for="allocation" class="col-sm-2 col-form-label">Alocação dos canais:</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" ng-model="trunk.allocation" name="allocation">
+                            <option value="">Selecione uma opção</option>
+                            <option value="asc">Crescente</option>
+                            <option value="desc">Decrescente</option>
+                            <option value="rasc">Rotacionado Crescente</option>
+                            <option value="rdesc">Rotacionado Decrescente</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row" ng-if="trunk.type === 'KHOMP'">
+                    <label for="channels" class="col-sm-2 col-form-label">Canais:</label>
+                    <div class="col-sm-10">
+                        <div class="row" ng-repeat="board in khompBoards">
+                            <div class="col-sm">
+                                <div class="row" style="padding-top: 10px;">
+                                    <b>Placa {{board.id}}:</b>
+                                </div>
+                                <div class="row border" ng-if="board.links.length > 0" style="padding-top: 3px;">
+                                    <div class="col-sm-1">
+                                        E1:
+                                    </div>
+                                    <div class="col-sm" ng-repeat="link in board.links">
+                                        <label class="control control-checkbox">
+                                            Link {{link.id}}
+                                            <input type="checkbox" ng-model="link.checked" ng-change="addRemoveChannel(link.id, link.checked)">
+                                            <div class="control_indicator"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row border" ng-if="board.fxo.length > 0" style="padding-top: 3px;">
+                                    <div class="col-sm-1">
+                                        FXO:
+                                    </div>
+                                    <div class="col-sm"  ng-repeat="fxoChannel in board.fxo">
+                                        <label class="control control-checkbox">
+                                            Canal {{fxoChannel.id}}
+                                            <input type="checkbox" ng-model="fxoChannel.checked" ng-change="addRemoveChannel(fxoChannel.id, fxoChannel.checked)">
+                                            <div class="control_indicator"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row border" ng-if="board.gsm.length > 0" style="padding-top: 3px;">
+                                    <div class="col-sm-1">
+                                        GSM:
+                                    </div>
+                                    <div class="col-sm" ng-repeat="gsmChannel in board.gsm">
+                                        <label class="control control-checkbox">
+                                            Canal {{gsmChannel.id}}
+                                            <input type="checkbox" ng-model="gsmChannel.checked" ng-change="addRemoveChannel(gsmChannel.id, gsmChannel.checked)">
+                                            <div class="control_indicator"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row" ng-if="trunk.type !== 'KHOMP' && trunk.type">
+                    <label for="username" class="col-sm-2 col-form-label">Usuário:</label>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="text" ng-model="trunk.user" name="user" placeholder="Usuário"/>
+                    </div>
+                    <label for="username" class="col-sm-1 col-form-label">Senha:</label>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="text" ng-model="trunk.secret" name="secret" placeholder="Senha"/>
+                    </div>
+                </div>
+                <div class="form-group row" ng-if="trunk.type !== 'KHOMP' && trunk.type">
+                    <label for="ip" class="col-sm-2 col-form-label">IP:</label>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="text" ng-model="trunk.ip" name="ip" placeholder="IP"/>
+                    </div>
+                    <label class="control control-checkbox">
+                        NAT
+                        <input type="checkbox" ng-model="trunk.nat">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-checkbox">
+                        Aceitar Registro
+                        <input type="checkbox" ng-model="trunk.receiveRegistry">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-checkbox">
+                        Enviar Registro
+                        <input type="checkbox" ng-model="trunk.sendRegistry">
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+                <div class="form-group row" ng-if="trunk.type !== 'KHOMP' && trunk.type">
+                    <label for="codecs" class="col-sm-2 col-form-label">CODECs:</label>
+                    <div class="col-sm">
+                        <select class="form-control" ng-model="trunk.codec1" name="codec1">
+                            <option value="">CODEC 1</option>
+                            <option value="alaw">alaw</option>
+                            <option value="ulaw">ulaw</option>
+                            <option value="gsm">GSM</option>
+                            <option value="g729">G729</option>
+                        </select>
+                    </div>
+                    <div class="col-sm">
+                        <select class="form-control" ng-model="trunk.codec2" name="codec2">
+                            <option value="">CODEC 2</option>
+                            <option value="alaw">alaw</option>
+                            <option value="ulaw">ulaw</option>
+                            <option value="gsm">GSM</option>
+                            <option value="g729">G729</option>
+                        </select>
+                    </div>
+                    <div class="col-sm">
+                        <select class="form-control" ng-model="trunk.codec3" name="codec3">
+                            <option value="">CODEC 3</option>
+                            <option value="alaw">alaw</option>
+                            <option value="ulaw">ulaw</option>
+                            <option value="gsm">GSM</option>
+                            <option value="g729">G729</option>
+                        </select>
+                    </div>
+                    <div class="col-sm">
+                        <select class="form-control" ng-model="trunk.codec4" name="codec4">
+                            <option value="">CODEC 4</option>
+                            <option value="alaw">alaw</option>
+                            <option value="ulaw">ulaw</option>
+                            <option value="gsm">GSM</option>
+                            <option value="g729">G729</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row" ng-if="trunk.type !== 'KHOMP' && trunk.type">
+                    <label for="extras" class="col-sm-2 col-form-label">Extras:</label>
+                    <div class="col-sm-6">
+                        <textarea class="form-control" ng-model="trunk.extras" name="extras" placeholder="Extras"></textarea>
+                    </div>
+                </div>
+            </form>
+            
+            <div ng-show="trunkForm.name.$dirty" ng-messages="trunkForm.name.$error">
+                <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    Por favor, preencha o campo nome!
+                </div>
+                <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    O campo nome deve ter no mínimo 3 caracteres.
+                </div>
+            </div>
+
+            <hr/>
+            <div class="col-sm-6">
+                <button ng-show="{{trunk.id}}" class="btn btn-primary" ng-click="editTrunk(trunk)" ng-disabled="trunkForm.$invalid">Salvar</button>
+                <button ng-hide="{{trunk.id}}" class="btn btn-primary" ng-click="addTrunk(trunk)" ng-disabled="trunkForm.$invalid">Salvar</button>
+                <a class="btn btn-secondary" href="#!trunks">Voltar</a>
+            </div>
+            <br>
+            <div ng-show="trunk.id" class="alert alert-primary" role="alert">
+                Tronco criado em '{{trunk.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{trunk.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            </div>
+        </div>
+    </div>

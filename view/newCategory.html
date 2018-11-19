@@ -1,0 +1,152 @@
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#!/peers">
+                    <i class="fa fa-phone"></i> Ramais
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#!/categories">
+                    Categorias
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" ng-show="category.id">Editar Categoria '{{category.name}}'</li>
+            <li class="breadcrumb-item active" aria-current="page" ng-hide="category.id">Nova Categoria</li>
+        </ol>
+    </nav>
+    <div class="main">
+        <div class="container">
+            <form name="categoryForm">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="text" ng-model="category.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                            ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="description" class="col-sm-2 col-form-label">Descrição:</label>
+                    <div class="col-sm-6">
+                        <textarea class="form-control" ng-model="category.description" name="description" placeholder="Descrição"></textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="features" class="col-sm-2 col-form-label">Funcionalidades:</label>
+                    <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">
+                        <label class="control control-checkbox">
+                            NAT
+                            <input type="checkbox" id="nat" ng-model="category.nat" ng-checked="category.nat">
+                            <div class="control_indicator"></div>
+                        </label>
+                        <label class="control control-checkbox">
+                            Voicemail (Correio de Voz)
+                            <input type="checkbox" id="voicemail" ng-model="category.voicemail" ng-checked="category.voicemail">
+                            <div class="control_indicator"></div>
+                        </label>
+                        <label class="control control-checkbox">
+                            Cadeado
+                            <input type="checkbox" id="lock" ng-model="category.lock" ng-checked="category.lock">
+                            <div class="control_indicator"></div>
+                        </label>
+                        <label class="control control-checkbox">
+                            Siga-me
+                            <input type="checkbox" id="followme" ng-model="category.followme" ng-checked="category.followme">
+                            <div class="control_indicator"></div>
+                        </label>
+                        <label class="control control-checkbox">
+                            PasswordCall
+                            <input type="checkbox" id="passwordCall" ng-model="category.passwordCall" ng-checked="category.passwordCall">
+                            <div class="control_indicator"></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="monitor" class="col-sm-2 col-form-label">Gravar Ligações:</label>
+                    <div class="col-sm-6 border" style="padding-bottom: 10px; padding-top: 10px;">
+                        <label class="control control-radio">
+                            Todas
+                            <input type="radio" id="no" ng-model="category.monitor" value="all">
+                            <div class="control_indicator"></div>
+                        </label>
+                        <label class="control control-radio">
+                            Externas
+                            <input type="radio" id="outbound" ng-model="category.monitor" value="external">
+                            <div class="control_indicator"></div>
+                        </label>
+                        <label class="control control-radio">
+                            Não
+                            <input type="radio" id="default" ng-model="category.monitor" value="no" ng-checked="!category.monitor || category.monitor === 'no'">
+                            <div class="control_indicator"></div>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="callLimit" class="col-sm-2 col-form-label">Lig. Simultâneas:</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="text" ng-model="category.callLimit" name="callLimit" ng-pattern="/^\d{1,20}$/" />
+                    </div>
+                    <label for="timeout" class="col-sm-2 col-form-label">Timeout:</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="text" ng-model="category.timeout" name="timeout" ng-pattern="/^\d{1,20}$/" />
+                    </div>
+                    <label for="overflowExtension" class="col-sm-2 col-form-label">Transbordo:</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="text" ng-model="category.overflowExtension" name="overflowExtension" ng-pattern="/^\d{1,20}$/" />
+                    </div>
+                </div>
+            </form>
+            
+            <div ng-show="categoryForm.name.$dirty" ng-messages="categoryForm.name.$error">
+                <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    Por favor, preencha o campo nome!
+                </div>
+                <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    O campo nome deve ter no mínimo 3 caracteres.
+                </div>
+            </div>
+
+            <div ng-show="categoryForm.callLimit.$dirty" ng-messages="categoryForm.callLimit.$error">
+                <div ng-message="pattern" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    O campo ligações simultâneas deve conter apenas dígitos.
+                </div>
+            </div>
+
+            <div ng-show="categoryForm.timeout.$dirty" ng-messages="categoryForm.timeout.$error">
+                <div ng-message="pattern" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    O campo timeout deve conter apenas dígitos.
+                </div>
+            </div>
+
+            <div ng-show="categoryForm.overflow.$dirty" ng-messages="categoryForm.overflow.$error">
+                <div ng-message="pattern" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    O campo transbordo deve conter apenas dígitos.
+                </div>
+            </div>
+
+            <hr/>
+            <div class="col-sm-6">
+                <button ng-show="{{category.id}}" class="btn btn-primary" ng-click="editCategory(category)" ng-disabled="categoryForm.$invalid">Salvar</button>
+                <button ng-hide="{{category.id}}" class="btn btn-primary" ng-click="addCategory(category)" ng-disabled="categoryForm.$invalid">Salvar</button>
+                <a class="btn btn-secondary" href="#!categories">Voltar</a>
+            </div>
+            <br>
+            <div ng-show="category.id" class="alert alert-primary" role="alert">
+                Categoria criada em '{{category.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{category.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            </div>
+        </div>
+    </div>

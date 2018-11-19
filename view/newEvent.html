@@ -1,0 +1,155 @@
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#!/events">
+                    <i class="fa fa-clock"></i> Eventos / Feriados
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" ng-show="event.id">Editar Evento '{{event.name}}'</li>
+            <li class="breadcrumb-item active" aria-current="page" ng-hide="event.id">Novo Evento</li>
+        </ol>
+    </nav>
+    <div class="main">
+        <div class="container">
+            <form name="eventForm">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="text" ng-model="event.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                            ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="dateStart" class="col-sm-2 col-form-label">Início:</label>
+                    <div class="col-sm-4 border">
+                        <div uib-datepicker ng-model="dateStart" ng-required="true" name="dateStart" ng-change="dateChanged()" datepicker-options="datepickerOptions"></div>
+                        <div class="row justify-content-md-center">
+                            <div uib-timepicker ng-model="dateStart" ng-required="true" name="startTime" ng-change="dateChanged()" show-meridian="false"></div>
+                        </div>
+                    </div>
+                    <label for="dateEnd" class="col-sm-2 col-form-label">Fim:</label>
+                    <div class="col-sm-4 border">
+                        <div uib-datepicker ng-model="dateEnd" ng-required="true" name="dateEnd" ng-change="dateChanged()" datepicker-options="datepickerOptions"></div>
+                        <div class="row justify-content-md-center">
+                            <div uib-timepicker ng-model="dateEnd" ng-required="true" name="endTime" ng-change="dateChanged()" show-meridian="false"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="message" class="col-sm-2 col-form-label">Mensagem:</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="text" ng-model="event.message" name="message" placeholder="Mensagem" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="message" class="col-sm-2 col-form-label">Após a Mensagem:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" ng-model="event.sendTo" name="sendTo" ng-change="emptySendToValue()">
+                            <option value="">Selecione uma opção</option>
+                            <option value="hangup">Não desviar / Desligar</option>
+                            <option value="peer">Ramal</option>
+                            <option value="queue">Fila</option>
+                            <option value="external">Telefone</option>
+                            <option value="ivr">URA</option>
+                            <option value="customRule">Regra customizada</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4" ng-if="event.sendTo === 'peer'">
+                        <select class="form-control" ng-model="event.sendToValue" id="sendToValuePeer" name="sendToValuePeer" ng-change="empty">
+                            <option value="">Selecione um ramal</option>
+                            <option ng-repeat="peer in peers" ng-value="peer.id">{{peer.username}} - {{peer.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4" ng-if="event.sendTo === 'queue'">
+                        <select class="form-control" ng-model="event.sendToValue" id="sendToValueQueue" name="sendToValueQueue" ng-options="queue.id as queue.name for queue in queues | orderBy:'name'">
+                            <option value="">Selecione uma fila</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4" ng-if="event.sendTo === 'external'">
+                        <input class="form-control" type="text" ng-model="event.sendToValue" id="sendToValueExternal" name="sendToValueExternal" placeholder="Telefone" />
+                    </div>
+                    <div class="col-sm-4" ng-if="event.sendTo === 'ivr'">
+                        <select class="form-control" ng-model="event.sendToValue" id="sendToValueIvr" name="sendToValueIvr" ng-options="ivr.id as ivr.name for ivr in ivrs | orderBy:'name'">
+                            <option value="">Selecione uma URA</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4" ng-if="event.sendTo === 'customRule'">
+                        <select class="form-control" ng-model="event.sendToValue" id="sendToValueCustomRule" name="sendToValueCustomRule" ng-options="customRule.id as customRule.name for customRule in customRules | orderBy:'name'">
+                            <option value="">Selecione uma Regra Customizada</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ivrs" class="col-sm-2 col-form-label">URAs:</label>
+                    <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">                
+                        <span ng-repeat="gettingParentIndex in ivrs">
+                            <div class="row" ng-if="$index<ivrs.length/2+1">
+                                <div class="col-sm-3"  ng-repeat="ivr in ivrs | orderBy: 'name'">
+                                    <div ng-if="$index>=4*$parent.$index && $index <= 4*($parent.$index+1)-1">
+                                        <label class="control control-checkbox" ng-if="ivr != null">
+                                            {{ivr.name}}
+                                            <input type="checkbox" id="{{ivr.id}}" ng-model="ivr.checked" ng-checked="ivr.checked">
+                                            <div class="control_indicator"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="queues" class="col-sm-2 col-form-label">Filas:</label>
+                    <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">                
+                        <span ng-repeat="gettingParentIndex in queues">
+                            <div class="row" ng-if="$index<queues.length/2+1">
+                                <div class="col-sm-3"  ng-repeat="queue in queues | orderBy: 'name'">
+                                    <div ng-if="$index>=4*$parent.$index && $index <= 4*($parent.$index+1)-1">
+                                        <label class="control control-checkbox" ng-if="queue != null">
+                                            {{queue.name}}
+                                            <input type="checkbox" id="{{queue.id}}" ng-model="queue.checked" ng-checked="queue.checked">
+                                            <div class="control_indicator"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </form>
+            
+            <div ng-show="eventForm.name.$dirty" ng-messages="eventForm.name.$error">
+                <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    Por favor, preencha o campo nome!
+                </div>
+                <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    O campo nome deve ter no mínimo 3 caracteres.
+                </div>
+            </div>
+
+            <div ng-show="event.dateStart >= event.dateEnd">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    A data inicial deve ser menor que a data final.
+                </div>
+            </div>
+
+            <hr/>
+            <div class="col-sm-6">
+                <button ng-show="{{event.id}}" class="btn btn-primary" ng-click="editEvent(event)" ng-disabled="eventForm.$invalid || event.dateStart >= event.dateEnd">Salvar</button>
+                <button ng-hide="{{event.id}}" class="btn btn-primary" ng-click="addEvent(event)" ng-disabled="eventForm.$invalid || event.dateStart >= event.dateEnd">Salvar</button>
+                <a class="btn btn-secondary" href="#!events">Voltar</a>
+            </div>
+            <br>
+            <div ng-show="event.id" class="alert alert-primary" role="alert">
+                Evento criado em '{{event.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{event.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            </div>
+        </div>
+    </div>

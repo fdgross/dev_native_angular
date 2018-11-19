@@ -1,0 +1,166 @@
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#!/serviceHours">
+                    <i class="fa fa-clock"></i> Horários de Atendimento
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" ng-show="serviceHour.id">Editar Horário de Atendimento '{{serviceHour.name}}'</li>
+            <li class="breadcrumb-item active" aria-current="page" ng-hide="serviceHour.id">Novo Horário de Atendimento</li>
+        </ol>
+    </nav>
+    <div class="main">
+        <div class="container">
+            <form name="serviceHourForm">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="text" ng-model="serviceHour.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                            ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12 border">
+                        <table class="table table-striped table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Início</th>
+                                    <th>Fim</th>
+                                    <th>Dias da Semana</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="detail in serviceHour.serviceHoursDetails">
+                                    <td><input class="form-control" type="time" id="startTime" name="input" ng-model="detail.startTimeTmp" ng-value="detail.startTimeTmp | date:'HH:mm' : 'UTC'" ng-required="true" ng-model-options="{timezone: '-0000' , timeSecondsFormat: '', timeStripZeroSeconds: true}"/></td>
+                                    <td><input class="form-control" type="time" id="endTime" name="input" ng-model="detail.endTimeTmp" ng-value="detail.endTimeTmp | date:'HH:mm' : 'UTC'" ng-required="true" ng-model-options="{timezone: '-0000' , timeSecondsFormat: '', timeStripZeroSeconds: true}"/></td>
+                                    <td>
+                                        <div class="row">
+                                            <div ng-repeat="dow in detail.dowsTmp">
+                                                <label class="control control-checkbox">
+                                                    {{dow.name}}
+                                                    <input type="checkbox" id="dow.name" ng-model="dow.checked">
+                                                    <div class="control_indicator"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-success btn-sm" ng-click="addDetail(detail)"><i class="fa fa-plus"></i></button>
+                                        <button type="button" class="btn btn-danger btn-sm" ng-click="removeDetail(detail)" ng-hide="serviceHour.serviceHoursDetails.length === 1"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="message" class="col-sm-2 col-form-label">Mensagem:</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" type="text" ng-model="serviceHour.message" name="message" placeholder="Mensagem" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="message" class="col-sm-2 col-form-label">Após a Mensagem:</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" ng-model="serviceHour.sendTo" name="sendTo" ng-change="emptySendToValue()">
+                            <option value="">Selecione uma opção</option>
+                            <option value="hangup">Não desviar / Desligar</option>
+                            <option value="queue">Fila</option>
+                            <option value="peer">Ramal</option>
+                            <option value="customRule">Regra customizada</option>
+                            <option value="external">Telefone</option>
+                            <option value="ivr">URA</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4" ng-if="serviceHour.sendTo === 'peer'">
+                        <select class="form-control" ng-model="serviceHour.sendToValue" id="sendToValuePeer" name="sendToValuePeer" ng-change="empty">
+                            <option value="">Selecione um ramal</option>
+                            <option ng-repeat="peer in peers" ng-value="peer.id">{{peer.username}} - {{peer.name}}</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4" ng-if="serviceHour.sendTo === 'queue'">
+                        <select class="form-control" ng-model="serviceHour.sendToValue" id="sendToValueQueue" name="sendToValueQueue" ng-options="queue.id as queue.name for queue in queues | orderBy:'name'">
+                            <option value="">Selecione uma fila</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4" ng-if="serviceHour.sendTo === 'external'">
+                        <input class="form-control" type="text" ng-model="serviceHour.sendToValue" id="sendToValueExternal" name="sendToValueExternal" placeholder="Telefone" />
+                    </div>
+                    <div class="col-sm-4" ng-if="serviceHour.sendTo === 'ivr'">
+                        <select class="form-control" ng-model="serviceHour.sendToValue" id="sendToValueIvr" name="sendToValueIvr" ng-options="ivr.id as ivr.name for ivr in ivrs | orderBy:'name'">
+                            <option value="">Selecione uma URA</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4" ng-if="serviceHour.sendTo === 'customRule'">
+                        <select class="form-control" ng-model="serviceHour.sendToValue" id="sendToValueCustomRule" name="sendToValueCustomRule" ng-options="customRule.id as customRule.name for customRule in customRules | orderBy:'name'">
+                            <option value="">Selecione uma Regra Customizada</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ivrs" class="col-sm-2 col-form-label">URAs:</label>
+                    <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">                
+                        <span ng-repeat="gettingParentIndex in ivrs">
+                            <div class="row" ng-if="$index<ivrs.length/2+1">
+                                <div class="col-sm-3"  ng-repeat="ivr in ivrs | orderBy: 'name'">
+                                    <div ng-if="$index>=4*$parent.$index && $index <= 4*($parent.$index+1)-1">
+                                        <label class="control control-checkbox" ng-if="ivr != null">
+                                            {{ivr.name}}
+                                            <input type="checkbox" id="{{ivr.id}}" ng-model="ivr.checked" ng-checked="ivr.checked">
+                                            <div class="control_indicator"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="queues" class="col-sm-2 col-form-label">Filas:</label>
+                    <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">                
+                        <span ng-repeat="gettingParentIndex in queues">
+                            <div class="row" ng-if="$index<queues.length/2+1">
+                                <div class="col-sm-3"  ng-repeat="queue in queues | orderBy: 'name'">
+                                    <div ng-if="$index>=4*$parent.$index && $index <= 4*($parent.$index+1)-1">
+                                        <label class="control control-checkbox" ng-if="queue != null">
+                                            {{queue.name}}
+                                            <input type="checkbox" id="{{queue.id}}" ng-model="queue.checked" ng-checked="queue.checked">
+                                            <div class="control_indicator"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </form>
+            
+            <div ng-show="serviceHourForm.name.$dirty" ng-messages="serviceHourForm.name.$error">
+                <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    Por favor, preencha o campo nome!
+                </div>
+                <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    O campo nome deve ter no mínimo 3 caracteres.
+                </div>
+            </div>
+
+            <hr/>
+            <div class="col-sm-6">
+                <button ng-show="{{serviceHour.id}}" class="btn btn-primary" ng-click="editServiceHour(serviceHour)" ng-disabled="serviceHourForm.$invalid">Salvar</button>
+                <button ng-hide="{{serviceHour.id}}" class="btn btn-primary" ng-click="addServiceHour(serviceHour)" ng-disabled="serviceHourForm.$invalid">Salvar</button>
+                <a class="btn btn-secondary" href="#!serviceHours">Voltar</a>
+            </div>
+            <br>
+            <div ng-show="serviceHour.id" class="alert alert-primary" role="alert">
+                Horário criado em '{{serviceHour.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{serviceHour.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            </div>
+        </div>
+    </div>

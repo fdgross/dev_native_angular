@@ -1,0 +1,57 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#!/mohs">
+                <i class="fa fa-music"></i> Músicas de Espera
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" ng-show="moh.id">Editar Música de Espera '{{moh.name}}'</li>
+        <li class="breadcrumb-item active" aria-current="page" ng-hide="moh.id">Nova Música de Espera</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="mohForm">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="moh.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="description" class="col-sm-2 col-form-label">Descrição:</label>
+                <div class="col-sm-6">
+                    <textarea class="form-control" ng-model="moh.description" name="description" placeholder="Descrição"></textarea>
+                </div>
+            </div>
+        </form>
+
+        <div ng-show="mohForm.name.$dirty" ng-messages="mohForm.name.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo nome!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo nome deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        
+        <hr/>
+        <div class="col-sm-6">
+            <button ng-show="{{moh.id}}" class="btn btn-primary" ng-click="editMoh(moh)" ng-disabled="mohForm.$invalid">Salvar</button>
+            <button ng-hide="{{moh.id}}" class="btn btn-primary" ng-click="addMoh(moh)" ng-disabled="mohForm.$invalid">Salvar</button>
+            <a class="btn btn-secondary" href="#!mohs">Voltar</a>
+        </div>
+        <br>
+        <div ng-show="moh.id" class="alert alert-primary" role="alert">
+            Música de espera criada em '{{moh.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{moh.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+        </div>
+    </div>
+</div>

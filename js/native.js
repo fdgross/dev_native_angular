@@ -1,0 +1,1 @@
+angular.module("nativeIP", ["ngMessages", "ngRoute", "ngLocale", "ui.bootstrap", "ui.bootstrap.tpls", "dndLists"]);

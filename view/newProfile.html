@@ -1,0 +1,74 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#!/peers">
+                <i class="fa fa-phone"></i> Ramais
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="#!/profiles">
+                Perfis
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" ng-show="profile.id">Editar Perfil '{{profile.name}}'</li>
+        <li class="breadcrumb-item active" aria-current="page" ng-hide="profile.id">Novo Perfil</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="profileForm">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="profile.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="description" class="col-sm-2 col-form-label">Descrição:</label>
+                <div class="col-sm-6">
+                    <textarea class="form-control" ng-model="profile.description" name="description" placeholder="Descrição"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="outRoutes" class="col-sm-2 col-form-label">Rotas de Saída:</label>
+                <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">                
+                    <div ng-repeat="outRoute in outRoutes | orderBy:'name'" class="form-check form-check-inline">
+                        <label class="control control-checkbox">
+                            {{outRoute.name}}
+                            <input type="checkbox" id="{{outRoute.id}}" ng-model="outRoute.checked" ng-checked="outRoute.checked">
+                            <div class="control_indicator"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div ng-show="profileForm.name.$dirty" ng-messages="profileForm.name.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo nome!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo nome deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        
+        <hr/>
+        <div class="col-sm-6">
+            <button ng-show="{{profile.id}}" class="btn btn-primary" ng-click="editProfile(profile)" ng-disabled="profileForm.$invalid">Salvar</button>
+            <button ng-hide="{{profile.id}}" class="btn btn-primary" ng-click="addProfile(profile)" ng-disabled="profileForm.$invalid">Salvar</button>
+            <a class="btn btn-secondary" href="#!profiles">Voltar</a>
+        </div>
+        <br>
+        <div ng-show="profile.id" class="alert alert-primary" role="alert">
+            Perfil criado em '{{profile.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{profile.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+        </div>
+    </div>
+</div>

@@ -1,0 +1,237 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">
+            <i class="fa fa-briefcase"></i> Funcionalidades
+        </li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="featuresForm">
+            <div ng-show="returnStatus === 422" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <h6 class="alert-heading"><b>ERRO!</b></h6>
+                Erro ao editar os códigos de funcionalidade. Tente novamente.
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <th width="10%">Código</th>
+                            <th width="30%">Funcionalidade</th>
+                            <th width="60%">Descrição</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.externalCode" name="externalCode" />
+                                </td>
+                                <td>
+                                    Dígito(s) para ligações externas
+                                </td>
+                                <td>
+                                    Dígito(s) para "puxar linha" para ligações externas.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.blindxfer" name="blindxfer" />
+                                </td>
+                                <td>
+                                    Transferência direta
+                                </td>
+                                <td>
+                                    Transfere a ligação diretamente para o destino.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.atxfer" name="atxfer" />
+                                </td>
+                                <td>
+                                    Transferência assistida
+                                </td>
+                                <td>
+                                    Transfere a ligação após consultar o destino.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.cancelxfer" name="cancelxfer" />
+                                </td>
+                                <td>
+                                    Cancelar transferência
+                                </td>
+                                <td>
+                                    Cancela a transferência assistida.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.xfertimeout" name="xfertimeout" />
+                                </td>
+                                <td>
+                                    Timeout da transferência assistida
+                                </td>
+                                <td>
+                                    Tempo para atendimento de uma transferência assistida.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.pickup" name="pickup" />
+                                </td>
+                                <td>
+                                    Puxar/Capturar ligação do grupo
+                                </td>
+                                <td>
+                                    Captura a ligação de um ramal do grupo que está tocando.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.pickupexten" name="pickupexten" />
+                                </td>
+                                <td>
+                                    Puxar/Capturar ligação de um ramal
+                                </td>
+                                <td>
+                                    Captura a ligação de um ramal qualquer que está tocando.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.park" name="park" />
+                                </td>
+                                <td>
+                                    Estacionamento de ligações
+                                </td>
+                                <td>
+                                    Coloca a ligação em espera para ser capturada de outro ramal.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.parkpos" name="parkpos" />
+                                </td>
+                                <td>
+                                    Posições de estacionamento
+                                </td>
+                                <td>
+                                    Posições para estacionamento de ligações.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.parktime" name="parktime" />
+                                </td>
+                                <td>
+                                    Tempo de estacionamento
+                                </td>
+                                <td>
+                                    Tempo em segundos que a ligação fica estacionada antes de retornar para o ramal que a estacionou.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.confexten" name="confexten" />
+                                </td>
+                                <td>
+                                    Sala de Conferência
+                                </td>
+                                <td>
+                                    Ramal para acessar a sala de conferência agendada.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.autoconf" name="autoconf" />
+                                </td>
+                                <td>
+                                    Conferência no ramal
+                                </td>
+                                <td>
+                                    Ativa a conferência no ramal. As salas são código+0 até código+9.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.voicemail" name="voicemail" />
+                                </td>
+                                <td>
+                                    Voicemail / Correio de Voz
+                                </td>
+                                <td>
+                                    Acesso ao correio de voz.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.lock" name="lock" />
+                                </td>
+                                <td>
+                                    Cadeado
+                                </td>
+                                <td>
+                                    Ativa/Desativa o cadeado no ramal, bloqueando o ramal através de senha.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.followme" name="followme" />
+                                </td>
+                                <td>
+                                    Siga-me
+                                </td>
+                                <td>
+                                    Ativa/Desativa o siga-me no ramal.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.sayexten" name="sayexten" />
+                                </td>
+                                <td>
+                                    Fala ramal
+                                </td>
+                                <td>
+                                    Informa o número do ramal que está discando.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.sayipexten" name="sayipexten" />
+                                </td>
+                                <td>
+                                    Fala IP do ramal
+                                </td>
+                                <td>
+                                    Informa o endereço IP do ramal que está discando.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-control" type="text" ng-model="features.sayip" name="sayip" />
+                                </td>
+                                <td>
+                                    Fala IP do Native
+                                </td>
+                                <td>
+                                    Informa o endereço IP do servidor do Native.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+        
+        <hr/>
+        <div class="col-sm-6">
+            <button class="btn btn-primary" ng-click="editFeatures(features)">Salvar</button>
+        </div>
+        <br>
+        <div ng-show="peer.id" class="alert alert-primary" role="alert">
+            Funcionalidades atualizadas pela última vez em '{{features.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+        </div>
+    </div>
+</div>

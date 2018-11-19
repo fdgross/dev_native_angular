@@ -1,0 +1,70 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#!/peers">
+                <i class="fa fa-phone"></i> Ramais
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="#!/costCenters">
+                Centros de Custos
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" ng-show="costCenter.id">Editar Centro de Custos '{{costCenter.name}}'</li>
+        <li class="breadcrumb-item active" aria-current="page" ng-hide="costCenter.id">Novo Centro de Custos</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="costCenterForm">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="costCenter.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="description" class="col-sm-2 col-form-label">Descrição:</label>
+                <div class="col-sm-6">
+                    <textarea class="form-control" ng-model="costCenter.description" name="description" placeholder="Descrição"></textarea>
+                </div>
+            </div>
+            <div class="form-group row" ng-show="costCenter.id">
+                <label for="members" class="col-sm-2 col-form-label">Membros:</label>
+                <div class="col-sm-6">
+                    <ul class="list-group">
+                        <li ng-repeat="peer in peers" class="list-group-item">
+                            <a href="#!newPeer/{{peer.id}}">{{peer.username}} - {{peer.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+        
+        <div ng-show="groupForm.name.$dirty" ng-messages="groupForm.name.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo nome!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo nome deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+        <hr/>
+        <div class="col-sm-6">
+            <button ng-show="{{costCenter.id}}" class="btn btn-primary" ng-click="editCostCenter(costCenter)" ng-disabled="costCenterForm.$invalid">Salvar</button>
+            <button ng-hide="{{costCenter.id}}" class="btn btn-primary" ng-click="addCostCenter(costCenter)" ng-disabled="costCenterForm.$invalid">Salvar</button>
+            <a class="btn btn-secondary" href="#!costCenters">Voltar</a>
+        </div>
+        <br>
+        <div ng-show="costCenter.id" class="alert alert-primary" role="alert">
+            Centro de Custos criado em '{{costCenter.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{costCenter.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+        </div>
+    </div>
+</div>

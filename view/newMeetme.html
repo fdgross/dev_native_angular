@@ -1,0 +1,82 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#!/meetmes">
+                <i class="fa fa-comments"></i> Conferências
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" ng-show="meetme.id">Editar Conferência '{{meetme.subject}}'</li>
+        <li class="breadcrumb-item active" aria-current="page" ng-hide="meetme.id">Nova Conferência</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="meetmeForm">
+            <div class="form-group row">
+                <label for="subject" class="col-sm-2 col-form-label">Assunto:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="meetme.subject" ng-required="true" name="subject" placeholder="Assunto" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 300, blur: 0}}" />
+                </div>
+                <div class="col-sm-4" style="font-weight: bold">
+                    <label class="control control-checkbox">
+                        Gravar
+                        <input type="checkbox" id="monitor" ng-model="meetme.monitor"/>
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password" class="col-sm-2 col-form-label">Senha:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="meetme.password" name="password" ng-disabled=true ng-init="meetme.password = getRandomPassword()"/>
+                </div>
+            </div>
+            <div class="form-group row" ng-show="meetme.subject">
+                <label for="startTime" class="col-sm-2 col-form-label">Início:</label>
+                <div class="col-sm-2 border">
+                    <div uib-timepicker ng-model="startTime" ng-required="true" name="startTime" ng-change="startTimeChanged()" show-meridian="false" ng-init="startTime = getStartTime()"></div>
+                </div>
+                <label for="endTime" class="col-sm-2 col-form-label">Fim:</label>
+                <div class="col-sm-2 border">
+                    <div uib-timepicker ng-model="endTime" ng-required="true" name="endTime" ng-change="endTimeChanged()" show-meridian="false" ng-init="endTime = getEndTime()"></div>
+                </div>
+            </div>
+            <div class="form-group row" ng-show="meetme.subject">
+                <label for="date" class="col-sm-2 col-form-label">Data:</label>
+                <div class="col-sm-4 border">
+                    <div uib-datepicker ng-model="date" ng-required="true" name="date" ng-change="dateChanged()" datepicker-options="datepickerOptions"></div>
+                </div>
+            </div>
+            <div class="form-group row">
+                
+            </div>
+        </form>
+        
+        <div ng-show="meetmeForm.subject.$dirty" ng-messages="meetmeForm.subject.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo assunto!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo assunto deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        <hr/>
+        <div class="col-sm-6">
+            <button ng-show="{{meetme.id}}" class="btn btn-primary" ng-click="editMeetme(meetme)" ng-disabled="meetmeForm.$invalid">Salvar</button>
+            <button ng-hide="{{meetme.id}}" class="btn btn-primary" ng-click="addMeetme(meetme)" ng-disabled="meetmeForm.$invalid">Salvar</button>
+            <a class="btn btn-secondary" href="#!meetmes">Voltar</a>
+        </div>
+        <br>
+        <div ng-show="meetme.id" class="alert alert-primary" role="alert">
+            Conferência criada em '{{meetme.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{meetme.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+        </div>
+    </div>
+</div>

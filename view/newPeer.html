@@ -1,0 +1,177 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#!/peers">
+                <i class="fa fa-phone"></i> Ramais
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" ng-show="peer.id">Editar Ramal {{peer.username}}</li>
+        <li class="breadcrumb-item active" aria-current="page" ng-hide="peer.id">Novo Ramal</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="peerForm">
+            <div ng-show="returnStatus === 422" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <h6 class="alert-heading"><b>ERRO!</b></h6>
+                O já existe outro ramal com esse número.
+            </div>
+            <div class="form-group row">
+                <label for="username" class="col-sm-2 col-form-label">Ramal:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" ng-model="peer.username" ng-required="true" name="username" placeholder="Ramal" ng-pattern="/^\d{1,20}$/"
+                        ng-maxlength="20" ng-keyup="peer.secret = 'voip' + peer.username"/>
+                </div>
+                <label for="secret" class="col-sm-2 col-form-label">Senha:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" ng-model="peer.secret" ng-required="true" name="secret" placeholder="Senha" ng-minlength="2"
+                        ng-model-options="{updateOn: 'blur', debounce:{blur: 0}}"/>
+                </div>
+                <div class="col-sm-4" style="font-weight: bold">
+                    <label class="control control-checkbox">
+                        CallCenter
+                        <input type="checkbox" id="callCenter" ng-model="peer.callCenter"/>
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="peer.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+                <div class="col-sm-4" style="font-weight: bold">
+                    <label class="control control-checkbox">
+                        Ocultar na Agenda
+                        <input type="checkbox" id="hideOnAgenda" ng-model="peer.hideOnAgenda"/>
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="cc" class="col-sm-2 col-form-label">Centro de Custos:</label>
+                <div class="col-sm-6">
+                    <select class="form-control" ng-model="peer.costCenterId" ng-options="costCenter.id as costCenter.name for costCenter in costCenters | orderBy:'name'"
+                        name="costCenter">
+                        <option value="">Selecione um Centro de Custos</option>
+                    </select>
+                </div>
+            </div>
+            <div ng-show="peer.category.voicemail" class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">E-Mail:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="email" ng-model="peer.email" name="email" placeholder="E-Mail"
+                    ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="groups" class="col-sm-2 col-form-label">Grupos:</label>
+                <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">                
+                    <span ng-repeat="gettingParentIndex in groups">
+                        <div class="row" ng-if="$index<groups.length/2+1">
+                            <div class="col-sm-3"  ng-repeat="group in groups | orderBy: 'name'">
+                                <div ng-if="$index>=4*$parent.$index && $index <= 4*($parent.$index+1)-1">
+                                    <label class="control control-checkbox" ng-if="group != null">
+                                        {{group.name}}
+                                        <input type="checkbox" id="{{group.id}}" ng-model="group.checked" ng-checked="group.checked">
+                                        <div class="control_indicator"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="profile" class="col-sm-2 col-form-label">Perfil:</label>
+                <div class="col-sm-6">
+                    <select class="form-control" ng-model="peer.profileId" ng-options="profile.id as profile.name for profile in profiles | orderBy:'name'"
+                        name="profile">
+                        <option value="">Selecione um Perfil</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="category" class="col-sm-2 col-form-label">Categoria:</label>
+                <div class="col-sm-6">
+                    <select class="form-control" ng-model="peer.category" ng-options="category as category.name for category in categories  | orderBy:'name' track by category.id"
+                        name="category">
+                        <option value="">Selecione uma Categoria</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+        <div ng-show="peerForm.username.$dirty" ng-messages="peerForm.username.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo ramal!
+            </div>
+
+            <div ng-message="pattern" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo ramal deve conter apenas dígitos.
+            </div>
+            <div ng-message="maxlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo ramal deve ter no máximo 20 caracteres.
+            </div>
+        </div>
+
+        <div ng-show="peerForm.name.$dirty" ng-messages="peerForm.name.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo nome!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo nome deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        <div ng-show="peerForm.secret.$dirty" ng-messages="peerForm.secret.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo senha!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo senha deve ter no mínimo 2 caracteres.
+            </div>
+        </div>
+
+        <div ng-show="peerForm.email.$dirty" ng-messages="peerForm.email.$error">
+            <div ng-message="email" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O e-mail informado é inválido.
+            </div>
+        </div>
+
+        <hr/>
+        <div class="col-sm-6">
+            <button ng-show="{{peer.id}}" class="btn btn-primary" ng-click="editPeer(peer)" ng-disabled="peerForm.$invalid">Salvar</button>
+            <button ng-hide="{{peer.id}}" class="btn btn-primary" ng-click="addPeer(peer)" ng-disabled="peerForm.$invalid">Salvar</button>
+            <a class="btn btn-secondary" href="#!peers">Voltar</a>
+        </div>
+        <br>
+        <div ng-show="peer.id" class="alert alert-primary" role="alert">
+            Ramal criado em '{{peer.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{peer.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+        </div>
+    </div>
+</div>

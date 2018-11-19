@@ -1,0 +1,375 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#!/customRules">
+                <i class="fa fa-code-branch"></i> Regras Customizadas
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" ng-show="customRule.id">Editar Regra Customizada '{{customRule.name}}'</li>
+        <li class="breadcrumb-item active" aria-current="page" ng-hide="customRule.id">Nova Regra Customizada</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="customRuleForm">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="customRule.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="description" class="col-sm-2 col-form-label">Descrição:</label>
+                <div class="col-sm-6">
+                    <textarea class="form-control" ng-model="customRule.description" name="description" placeholder="Descrição"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-12 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <div class="row">
+                        <div ng-repeat="(listName, list) in modelCommands.lists" class="col-md-12">
+                            <div class="panel panel-info">
+                                <div class="panel-heading" ng-if="listName === 'commands'">
+                                    <b>Comandos</b>
+                                </div>
+                                <div class="panel-heading" ng-if="listName === 'definition'">
+                                    <br><b>Definição</b>
+                                </div>
+                                <ul class="list-group list-group-striped dnd-list" dnd-list="list" 
+                                    dnd-allowed-types="modelCommands.noneAllowedTypes"
+                                    ng-if="listName === 'commands'"
+                                    style="max-height: 200px;">
+                                    <li class="list-group-item" ng-repeat="item in list"
+                                        dnd-draggable="item"
+                                        dnd-type="item.type"
+                                        dnd-effect-allowed="copy"
+                                        >
+                                        <i class="fa fa-bars"></i> {{item.name}}
+                                    </li>
+                                </ul>
+                                <ul class="list-group list-group-striped dnd-list" dnd-list="list" 
+                                    dnd-allowed-types="modelCommands.allAllowedTypes"
+                                    ng-if="listName === 'definition'"
+                                    style="max-height: none; overflow-y: hidden;">
+                                    <li class="list-group-item" ng-repeat="item in list"
+                                        dnd-draggable="item"
+                                        dnd-type="item.type"
+                                        dnd-effect-allowed="move"
+                                        dnd-moved="list.splice($index, 1)"
+                                    >
+                                        <div class="container" >       
+                                            <div class="row">
+                                                <h6><span class="badge badge-dark">{{$index+1}}</span></h6>
+                                                <div class="col-sm">
+                                                    <i class="fa fa-bars"></i> {{item.name}}
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <input type="text" class="form-control" ng-model="item.label" placeholder="Label"/>
+                                                </div>
+                                                <i class="fa fa-times" ng-click="removeCommand(modelCommands.lists.definition, $index)"></i>
+                                            </div>
+                                            <div class="row" ng-include="item.type+'.html'"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div ng-show="customRuleForm.name.$dirty" ng-messages="customRuleForm.name.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo nome!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo nome deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        
+        <hr/>
+        <div class="col-sm-6">
+            <button ng-show="{{customRule.id}}" class="btn btn-primary" ng-click="editCustomRule(customRule)" ng-disabled="customRuleForm.$invalid">Salvar</button>
+            <button ng-hide="{{customRule.id}}" class="btn btn-primary" ng-click="addCustomRule(customRule)" ng-disabled="customRuleForm.$invalid">Salvar</button>
+            <a class="btn btn-secondary" href="#!customRules">Voltar</a>
+        </div>
+        <br>
+        <div ng-show="customRule.id" class="alert alert-primary" role="alert">
+            Regra customizada criada em '{{customRule.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{customRule.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="hangup.html"></script>
+
+<script type="text/ng-template" id="read.html">
+    <div class="col-sm-2">
+        <input type="text" class="form-control" ng-model="item.readTimeout" placeholder="Timeout"/>
+    </div>
+    <div class="col-sm-2">
+        <input type="text" class="form-control" ng-model="item.readDigits" placeholder="Dígitos"/>
+    </div>
+    <div class="col-sm-2">
+        <input type="text" class="form-control" ng-model="item.readVariable" placeholder="Variável"/>
+    </div>
+    <div class="col-sm-6">
+        <input type="text" class="form-control" ng-model="item.readAudio" placeholder="Arquivo"/>
+    </div>
+</script>
+
+<script type="text/ng-template" id="custom.html">
+    <div class="col-sm-3">
+        <input type="text" class="form-control" ng-model="item.customCommand" placeholder="Comando"/>
+    </div>
+    <div class="col-sm-9">
+        <input type="text" class="form-control" ng-model="item.customParameters" placeholder="Parâmetros"/>
+    </div>
+</script>
+
+<script type="text/ng-template" id="playback.html">
+    <div class="col-sm-4">
+        <input type="text" class="form-control" ng-model="item.playbackAudio" placeholder="Arquivo"/>
+    </div>
+</script>
+
+<script type="text/ng-template" id="set.html">
+    <div class="col-sm-4">
+        <input type="text" class="form-control" ng-model="item.setVar" placeholder="Variável"/>
+    </div>
+    <div class="col-sm-4">
+        <input type="text" class="form-control" ng-model="item.setVarValue" placeholder="Valor"/>
+    </div>
+</script>
+
+<script type="text/ng-template" id="dial.html">
+    <div class="col-sm-3">
+        <select class="form-control" ng-model="item.dialType" 
+            name="dialType">
+            <option value="peer">Ramal</option>
+            <option value="variable">Variável</option>
+            <option value="external">Telefone Externo</option>
+        </select>
+    </div>
+    <div class="col-sm-4" ng-if="item.dialType === 'variable' || item.dialType === 'external'">
+        <input type="text" class="form-control" ng-model="item.dialDest" placeholder="Destino/Variável"/>
+    </div>
+    <div class="col-sm-4" ng-if="item.dialType === 'peer'">
+        <select class="form-control" ng-model="item.dialDest"  
+            name="peer">
+            <option value="">Selecione um Ramal</option>
+            <option ng-repeat="peer in peers" ng-value="peer.id">{{peer.username}} - {{peer.name}}</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/ng-template" id="goto.html">
+    <div class="col-sm-3">
+        <select class="form-control" ng-model="item.gotoType" 
+            name="gotoType">
+            <option value="line">Label</option>
+            <option value="ivr">URA</option>
+        </select>
+    </div>
+    <div class="col-sm-4" ng-if="item.gotoType === 'line'">
+        <input type="text" class="form-control" ng-model="item.gotoDest" placeholder="Label"/>
+    </div>
+    <div class="col-sm-4" ng-if="item.gotoType === 'ivr'">
+        <select class="form-control" ng-model="item.gotoDest" 
+            ng-options="ivr.id as ivr.name for ivr in ivrs | orderBy:'name'" 
+            name="ivr">
+            <option value="">Selecione uma URA</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/ng-template" id="queue.html">
+    <div class="col-sm-8">
+        <select class="form-control" ng-model="item.queue" 
+            ng-options="queue.id as queue.name for queue in queues | orderBy:'name'"
+            name="queue">
+            <option value="">Selecione uma Fila</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/ng-template" id="condition.html">
+    <div class="col-sm-12">
+        Se
+    </div>
+    <div class="col-sm-12" ng-repeat="group in item.conditionGroups">
+        <div class="row">
+            <div class="col-sm-10 border" style="padding-top: 5px">
+                <div class="row" ng-repeat="cond in group.conditionGroup">
+                    <div class="col-sm-3">
+                        <input class="form-control" type="text" ng-model="cond.conditionVariable" name="conditionVariable" placeholder="Variável">
+                    </div>
+                    <div class="col-sm-2">
+                        <select class="form-control" ng-model="cond.conditionOperator" name="conditionOperator">
+                            <option value=""></option>
+                            <option value="eq">=</option>
+                            <option value="ne">!=</option>
+                            <option value="lt"><</option>
+                            <option value="gt">></option>
+                            <option value="le"><=</option>
+                            <option value="ge">>=</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="text" ng-model="cond.conditionValue" name="conditionValue" placeholder="Valor">
+                    </div>
+                    <div class="col-sm-2">
+                        <select class="form-control" ng-model="cond.logicalOperator" name="logicalOperator">
+                            <option value=""></option>
+                            <option value="and">E</option>
+                            <option value="or">OU</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-success btn-sm" ng-click="addCondition(group.conditionGroup, cond)"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="removeCondition(group.conditionGroup, cond)" ng-hide="group.conditionGroup.length === 1"><i class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <select class="form-control" ng-model="group.logicalOperator" name="logicalOperator">
+                    <option value=""></option>
+                    <option value="and">E</option>
+                    <option value="or">OU</option>
+                </select>
+                <button type="button" class="btn btn-success btn-sm" ng-click="addGroup(item.conditionGroups, group)"><i class="fa fa-plus"></i></button>
+                <button type="button" class="btn btn-danger btn-sm" ng-click="removeGroup(item.conditionGroups, group)" ng-hide="item.conditionGroups.length === 1"><i class="fa fa-trash"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        Então
+    </div>
+    <div class="col-sm-12">
+        <ul class="list-group dnd-list" dnd-list="item.thenCommand" 
+            dnd-allowed-types="modelCommands.conditionAllowedTypes"
+            dnd-disable-if="item.thenCommand.length >= 1"
+            ng-if="listName === 'definition'"
+            style="max-height: none; overflow-y: hidden;">
+            <li class="list-group-item"
+                dnd-draggable="item.thenCommand"
+                dnd-type="modelCommands.type"
+                dnd-effect-allowed="move"
+                dnd-moved="item.thenCommand.splice($index, 1)"
+                ng-repeat="command in item.thenCommand"
+            >
+            <div class="row">
+                <div class="col-sm">
+                    <i class="fa fa-bars"></i> {{command.name}}
+                </div>
+                <i class="fa fa-times" ng-click="removeCommand(item.thenCommand, $index)"></i>
+            </div>
+            <div class="row" ng-include="command.type+'.html'"></div>
+            </li>
+        </ul>
+    </div>
+</script>
+
+<script type="text/ng-template" id="timeCondition.html">
+    <div class="col-sm-12">
+        Se
+    </div>
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-12 border" style="padding-top: 5px">
+                <div class="row">
+                    <div class="col-sm-2">
+                        Dias da semana
+                    </div>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div ng-repeat="dow in item.dows">
+                                <label class="control control-checkbox">
+                                    {{dow.name}}
+                                    <input type="checkbox" id="dow.name" ng-model="dow.checked">
+                                    <div class="control_indicator"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Dias
+                    </div>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="number" ng-model="item.startDay" name="startDay" placeholder="Dia" min="1" max="31" >
+                    </div>
+                    <div class="col-sm-1">
+                        a
+                    </div>
+                    <div class="col-sm-2">
+                        <input class="form-control"  type="number" ng-model="item.endDay" name="endDay" placeholder="Dia" min="1" max="31" >
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Mês
+                    </div>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="number" ng-model="item.startMonth" name="startMonth" placeholder="Mês" min="1" max="12" >
+                    </div>
+                    <div class="col-sm-1">
+                        ao
+                    </div>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="number" ng-model="item.endMonth" name="endMonth" placeholder="Mês" min="1" max="12">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        Horário
+                    </div>
+                    <div class="col-sm-2">
+                            <input class="form-control" type="time" id="startTime" name="input" ng-model="item.startTime" ng-model-options="{timezone: '-0000' , timeSecondsFormat: '', timeStripZeroSeconds: true}"/>
+                    </div>
+                    <div class="col-sm-1">
+                        às
+                    </div>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="time" id="endTime" name="input" ng-model="item.endTime" ng-model-options="{timezone: '-0000' , timeSecondsFormat: '', timeStripZeroSeconds: true}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12">
+        Então
+    </div>
+    <div class="col-sm-12">
+        <ul class="list-group dnd-list" dnd-list="item.thenCommand" 
+            dnd-allowed-types="modelCommands.conditionAllowedTypes"
+            dnd-disable-if="item.thenCommand.length >= 1"
+            ng-if="listName === 'definition'"
+            style="max-height: none; overflow-y: hidden;">
+            <li class="list-group-item"
+                dnd-draggable="item.thenCommand"
+                dnd-type="modelCommands.type"
+                dnd-effect-allowed="move"
+                dnd-moved="item.thenCommand.splice($index, 1)"
+                ng-repeat="command in item.thenCommand"
+            >
+            <div class="row">
+                <div class="col-sm">
+                    <i class="fa fa-bars"></i> {{command.name}}
+                </div>
+                <i class="fa fa-times" ng-click="removeCommand(item.thenCommand, $index)"></i>
+            </div>
+            <div class="row" ng-include="command.type+'.html'"></div>
+            </li>
+        </ul>
+    </div>
+</script>

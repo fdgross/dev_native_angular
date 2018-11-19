@@ -1,0 +1,161 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#!/users">
+                <i class="fa fa-user"></i> Usuários
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" ng-show="user.id">Editar Usuário {{user.name}}</li>
+        <li class="breadcrumb-item active" aria-current="page" ng-hide="user.id">Novo Usuário</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="userForm">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="user.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">E-Mail:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="user.email" name="email" placeholder="E-Mail" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="username" class="col-sm-2 col-form-label">Login:</label>
+                <div class="col-sm-4">
+                    <input class="form-control" type="text" ng-model="user.username" ng-required="true" name="username" placeholder="Login" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+                <label for="password" class="col-sm-2 col-form-label">Senha:</label>
+                <div class="col-sm-4">
+                    <input class="form-control" type="password" ng-model="user.password" ng-required="true" name="password" placeholder="Senha" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="callcenter" class="col-sm-2 col-form-label">CallCenter:</label>
+                <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <label class="control control-radio">
+                        Supervisor
+                        <input type="radio" id="supervisor" ng-model="user.callcenter" value="supervisor">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-radio">
+                        Atendimento Imediato
+                        <input type="radio" id="autoanswer" ng-model="user.callcenter" value="autoanswer">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-radio">
+                        Atendimento Padrão
+                        <input type="radio" id="default" ng-model="user.callcenter" value="default">
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Módulos:</label>
+                <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <span ng-repeat="gettingParentIndex in permissions">
+                        <div class="row" ng-if="$index<permissions.length/2+1">
+                            <div class="col-sm-4"  ng-repeat="permission in permissions | orderBy: 'displayName'">
+                                <div ng-if="$index>=3*$parent.$index && $index <= 3*($parent.$index+1)-1">
+                                    <label class="control control-checkbox" ng-if="permission != null">
+                                        {{permission.displayName}}
+                                        <input type="checkbox" id="{{permission.id}}" ng-model="permission.checked" ng-checked="permission.checked" ng-change="checkReportsSelected(permission)">
+                                        <div class="control_indicator"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row" ng-if="reportsSelected">
+                <label class="col-sm-2 col-form-label">Centros de Custos:</label>
+                <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <span ng-repeat="gettingParentIndex in costCenters">
+                        <div class="row" ng-if="$index<costCenters.length/2+1">
+                            <div class="col-sm-3"  ng-repeat="costCenter in costCenters | orderBy: 'name'">
+                                <div ng-if="$index>=4*$parent.$index && $index <= 4*($parent.$index+1)-1">
+                                    <label class="control control-checkbox" ng-if="costCenter != null">
+                                        {{costCenter.name}}
+                                        <input type="checkbox" id="{{costCenter.id}}" ng-model="costCenter.checked" ng-checked="costCenter.checked">
+                                        <div class="control_indicator"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Avatares:</label>
+                <div class="col-sm-10 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <div class="form-check form-check-inline" ng-repeat="avatar in avatars" ng-click="toggleAvatar(avatar)" ng-class="{imgSelected: avatar === user.avatar}">
+                        <img ng-src="assets/img/avatars/{{avatar}}" height="40px" />
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div ng-show="userForm.name.$dirty" ng-messages="userForm.name.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo nome!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo nome deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        <div ng-show="userForm.username.$dirty" ng-messages="userForm.username.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo login!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo login deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        <div ng-show="userForm.password.$dirty" ng-messages="userForm.password.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo senha!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo senha deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        <hr/>
+        <div class="col-sm-6">
+            <button ng-show="{{user.id}}" class="btn btn-primary" ng-click="editUser(user)" ng-disabled="userForm.$invalid">Salvar</button>
+            <button ng-hide="{{user.id}}" class="btn btn-primary" ng-click="addUser(user)" ng-disabled="userForm.$invalid">Salvar</button>
+            <a class="btn btn-secondary" href="#!users">Voltar</a>
+        </div>
+        <br>
+        <div ng-show="user.id" class="alert alert-primary" role="alert">
+            Usuário criado em '{{user.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{user.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+        </div>
+    </div>
+</div>

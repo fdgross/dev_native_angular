@@ -1,0 +1,211 @@
+.selected {
+    font-weight: bold;
+}
+
+.main {
+    margin-top: 15px;
+    background-color: #e9ecef;
+    border-radius: 0.3rem;
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 1px 2px 2px 3px rgb(192, 192, 192);
+}
+
+.form-control {
+    margin-bottom: 5px;
+}
+
+.breadcrumb {
+    background-color: #f37435;
+    box-shadow: 1px 2px 2px 3px rgb(192, 192, 192);
+    font-size: 1.2rem;
+}
+
+.breadcrumb-item.active {
+    color: whitesmoke;
+    font-weight: bold;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: whitesmoke;
+}
+
+.table thead {
+    background-color: #d3d4dd;
+    text-align: center;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.btn-secondary {
+    background-color: #f37435;
+    border-color: #f37435;
+}
+
+.col-form-label{
+    text-align: right;
+    font-weight: bold;
+}
+
+.control {
+    display: absolute;
+    position: relative;
+    padding-left: 2.5rem;
+    margin-bottom: 0.1rem;
+    padding-top: 0.1rem;
+    cursor: pointer;
+    
+}
+
+.control input {
+    position: relative;
+    z-index: -1;
+    opacity: 0;
+}
+
+.control_indicator {
+    stroke: #2d486a;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 16px;
+    transition: all 0.3s ease;
+    transform: translate3d(0, 0, 0);
+    position: absolute;
+    top: 1px;
+    left: 15px;
+    height: 20px;
+    width: 20px;
+    background: #e6e6e6;
+    border: 2px solid #acacac;
+    border-radius: 3px;    
+}
+
+.control-checkbox input:checked ~ .control_indicator {
+    stroke: #e6e6e6;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 16px;
+    transition: all 0.3s ease;
+    transform: translate3d(0, 0, 0);
+    background: #2d486a;
+    border: 2px solid #2d486a;
+    border-radius: 3px;
+}
+
+.control input:disabled ~ .control_indicator {
+    background: #e6e6e6;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.control_indicator:after {
+    box-sizing: unset;
+    content: '';
+    position: absolute;
+    display: none;
+}
+
+.control input:checked ~ .control_indicator:after {
+    display: block;
+}
+
+.control-checkbox .control_indicator:after {
+    left: 5px;
+    top: 3px;
+    width: 3px;
+    height: 8px;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.control-checkbox input:disabled ~ .control_indicator:after {
+    border-color: #7b7b7b;
+}
+
+.control-radio .control_indicator {
+    border-radius: 100%;
+}
+
+.control-radio input:checked ~ .control_indicator {
+    stroke: #e6e6e6;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 16px;
+    transition: all 0.3s ease;
+    transform: translate3d(0, 0, 0);
+    background: #2d486a;
+    border: 2px solid #2d486a;
+    border-radius: 100%;
+}
+
+.control-radio .control_indicator:after {
+    left: 5px;
+    top: 3px;
+    width: 3px;
+    height: 8px;
+    border: solid #ffffff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.imgSelected img {
+    border: 2px solid #2d486a;
+    border-radius: 3px;
+    padding: 1px;
+}
+
+.img-responsive {
+    background-color: #e6e6e6;
+    padding: 1px;
+}
+
+/**
+ * The dnd-list should always have a min-height,
+ * otherwise you can't drop to it once it's empty
+ */
+.dnd-list {
+    min-height: 42px;
+    max-height: 400px;
+    overflow-y: scroll;
+    padding-left: 0px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: block;
+    padding: 5px 5px;
+    margin-bottom: -1px;
+}
+
+/**
+ * The dndDraggingSource class will be applied to
+ * the source element of a drag operation. It makes
+ * sense to hide it to give the user the feeling
+ * that he's actually moving it.
+ */
+.dndDraggingSource {
+    display: none;
+}
+
+/**
+ * An element with .dndPlaceholder class will be
+ * added to the dnd-list while the user is dragging
+ * over it.
+ */
+.dndPlaceholder {
+    background-color: #ddd;
+    display: block;
+    min-height: 42px;
+}
+
+ul.list-group.list-group-striped li:nth-of-type(even){
+    background: rgb(241, 241, 241);
+}

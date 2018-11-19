@@ -1,0 +1,64 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active"><i class="fa fa-project-diagram"></i> Rotas Internas</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-sm">
+                <a class="btn btn-primary btn-block" href="#!newInternalRoute">Nova Rota</a>
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-danger btn-block" ng-if="hasInternalRouteSelected" data-toggle="modal" data-target="#modalDelete">Apagar Rotas</button>
+            </div>
+            <div class="col-sm">
+                <input class="form-control" type="text" ng-model="search" ng-model-options="{updateOn: 'default blur', debounce:{default: 500, blur: 0}}" placeholder="Procurar" />
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDeleteLabel">EXCLUIR ROTAS</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Você deseja realmente excluir as rotas selecionadas?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                    <button type="button" ng-click="deleteInternalRoutes(internalRoutes)" class="btn btn-danger" data-dismiss="modal">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="table-responsive-md">
+        <div ng-show="returnStatus === 422" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <h6 class="alert-heading"><b>ERRO!</b></h6>
+            Erro ao excluir rotas.
+        </div>
+        <table class="table table-striped table-bordered table-hover" ng-show="internalRoutes.length > 0">
+            <thead>
+                <th width="5%"></th>
+                <th><a href="" ng-click="orderBy('name')">Nome</a></th>
+                <th><a href="" ng-click="orderBy('description')">Descrição</a></th>
+            </thead>
+            <tr ng-class="{'selected': internalRoute.selected}" ng-repeat="internalRoute in internalRoutes | filter:search | orderBy:orderField:direction track by internalRoute.id">
+                <td>
+                    <label class="control control-checkbox">
+                        <input type="checkbox" ng-model="internalRoute.selected" ng-change="checkInternalRouteSelected(internalRoutes)"/>
+                        <div class="control_indicator"></div>
+                    </label>
+                </td>
+                <td><a href="#!newInternalRoute/{{internalRoute.id}}">{{internalRoute.name}} <span ng-show="{{::internalRoute.createdAt | new: 2}}" class="badge badge-pill badge-success">Novo</span></a></td>
+                <td>{{internalRoute.description}}</td>
+            </tr>
+        </table>
+    </div>
+    <hr/>
+</div>
