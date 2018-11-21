@@ -1,0 +1,66 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#!/callbacks">
+                <i class="fa fa-project-diagram"></i> Callbacks
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" ng-show="callback.id">Editar Callback '{{callback.name}}'</li>
+        <li class="breadcrumb-item active" aria-current="page" ng-hide="callback.id">Novo Callback</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="callbackForm">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="callback.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="message" class="col-sm-2 col-form-label">Áudio:</label>
+                <div class="col-sm-4">
+                    <input class="form-control" type="text" ng-model="callback.message" name="message" placeholder="Arquivo" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="profile" class="col-sm-2 col-form-label">Perfil para retorno:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" ng-model="callback.profileId" ng-options="profile.id as profile.name for profile in profiles | orderBy:'name'"
+                        name="profile" ng-required="true">
+                        <option value="">Selecione um Perfil</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+
+        <div ng-show="callbackForm.name.$dirty" ng-messages="callbackForm.name.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo nome!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo nome deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        
+        <hr/>
+        <div class="col-sm-6">
+            <button ng-show="{{callback.id}}" class="btn btn-primary" ng-click="editCallback(callback)" ng-disabled="callbackForm.$invalid">Salvar</button>
+            <button ng-hide="{{callback.id}}" class="btn btn-primary" ng-click="addCallback(callback)" ng-disabled="callbackForm.$invalid">Salvar</button>
+            <a class="btn btn-secondary" href="#!callbacks">Voltar</a>
+        </div>
+        <br>
+        <div ng-show="callback.id" class="alert alert-primary" role="alert">
+            Callback criado em '{{callback.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{callback.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+        </div>
+    </div>
+</div>

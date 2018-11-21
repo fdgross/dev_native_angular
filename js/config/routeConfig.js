@@ -999,6 +999,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             outRoutes: function () {
                 return "";
             },
+            callbacks: function () {
+                return "";
+            },
         }
     });
 
@@ -1030,6 +1033,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             outRoutes: function (outRoutesAPI) {
                 return outRoutesAPI.getOutRoutes();
             },
+            callbacks: function (callbacksAPI) {
+                return callbacksAPI.getCallbacks();
+            },
         }
     });
 
@@ -1060,6 +1066,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             outRoutes: function (outRoutesAPI) {
                 return outRoutesAPI.getOutRoutes();
+            },
+            callbacks: function (callbacksAPI) {
+                return callbacksAPI.getCallbacks();
             },
         }
     });
@@ -1146,6 +1155,61 @@ angular.module("nativeIP").config(function ($routeProvider){
     });
     /**
      * END ROUTER FOR OUTROUTES
+     */
+
+
+    /**
+     * ROUTER FOR CALLBACKS
+     */
+    $routeProvider.when("/callbacks", {
+        templateUrl: "view/callbacks.html",
+        controller: "callbacksController",
+        resolve: {
+            callbacks: function (callbacksAPI) {
+                return callbacksAPI.getCallbacks();
+            },
+            callback: function () {
+                return "";
+            },
+            profiles: function () {
+                return "";
+            }
+        }
+    });
+
+    $routeProvider.when("/newCallback/:id", {
+        templateUrl: "view/newCallback.html",
+        controller: "callbacksController",
+        resolve: {
+            callbacks: function () {
+                return "";
+            },
+            callback: function (callbacksAPI, $route) {
+                return callbacksAPI.getCallback($route.current.params.id);
+            },
+            profiles: function (profilesAPI) {
+                return profilesAPI.getProfiles();
+            }
+        }
+    });
+
+    $routeProvider.when("/newCallback", {
+        templateUrl: "view/newCallback.html",
+        controller: "callbacksController",
+        resolve: {
+            callbacks: function () {
+                return "";
+            },
+            callback: function () {
+                return "";
+            },
+            profiles: function (profilesAPI) {
+                return profilesAPI.getProfiles();
+            }
+        }
+    });
+    /**
+     * END ROUTER FOR CALLBACKS
      */
 
     /**

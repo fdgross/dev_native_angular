@@ -1,4 +1,4 @@
-angular.module("nativeIP").controller("inRoutesController", function ($scope, inRoute, inRoutes, queues, ivrs, peers, trunks, internalRoutes, outRoutes, inRoutesAPI, $location, $filter) {
+angular.module("nativeIP").controller("inRoutesController", function ($scope, inRoute, inRoutes, queues, ivrs, peers, trunks, internalRoutes, outRoutes, callbacks, inRoutesAPI, $location, $filter) {
 
     $scope.queues = queues.data;
     $scope.peers = peers.data;
@@ -6,6 +6,7 @@ angular.module("nativeIP").controller("inRoutesController", function ($scope, in
     $scope.trunks = trunks.data;
     $scope.internalRoutes = internalRoutes.data;
     $scope.outRoutes = outRoutes.data;
+    $scope.callbacks = callbacks.data;
 
     if(!inRoute){
         $scope.inRoute = new Object;

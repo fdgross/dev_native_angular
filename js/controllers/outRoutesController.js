@@ -91,8 +91,32 @@ angular.module("nativeIP").controller("outRoutesController", function ($scope, o
         $scope.outRoute.outRoutesDetails.splice( $scope.outRoute.outRoutesDetails.indexOf(detail), 1 );
     }
 
-    $scope.emptyDestination = function (detail){
-        detail.destination = "";
+    $scope.changeMask = function (detail){
+        detail.mask = "";
+        switch (detail.callType) {
+            case 'localLandline':
+                detail.mask = "[2-5]XXXXXXX";
+                break;
+            case 'localMobile':
+                detail.mask = "9[4-9]XXXXXXX";
+                break;
+            case 'longDistanceLandline':
+                detail.mask = "0ZZ[2-5]XXXXXXX";
+                break;
+            case 'longDistanceMobile':
+                detail.mask = "0ZZ9[4-9]XXXXXXX";
+                break;
+            case 'international':
+                detail.mask = "00X.";
+                break;
+            case 'services':
+                detail.mask = "1XX";
+                break;
+            case '0800':
+                detail.mask = "0800.";
+                break;
+        }
+
     }
 
     $scope.addOverflowDetail = function (detail, overflowDetail){
