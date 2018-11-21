@@ -8,14 +8,16 @@ angular.module("nativeIP").controller("outRoutesController", function ($scope, o
     if(!outRoute){
         $scope.outRoute = new Object;
         $scope.outRoute.outRoutesDetails = new Array;
-        $scope.outRoute.outRoutesDetails.push({mask: "", add: "", remove: "", destinationType: "", destination: ""});
+        $scope.outRoute.outRoutesDetails.push({mask: "", add: "", remove: "", destinationType: "", destination: "", enabled: true});
     }
 
     if(outRoute){
         $scope.outRoute = outRoute.data;
-        $scope.outRoute.outRoutesDetails = $scope.outRoute.OutRoutesDetails;
-        delete $scope.outRoute.OutRoutesDetails;
+        $scope.outRoute.outRoutesDetails = $scope.outRoute.OutRouteDetails;
+        delete $scope.outRoute.OutRouteDetails;
         angular.forEach($scope.outRoute.outRoutesDetails, function(detail){
+            detail.overflows = detail.OutRouteOverflows;
+            delete detail.OutRouteOverflows;
             if(detail.destinationType !== 'external'){
                 detail.destination = parseInt(detail.destination);
             }
@@ -93,4 +95,29 @@ angular.module("nativeIP").controller("outRoutesController", function ($scope, o
         detail.destination = "";
     }
 
+    $scope.addOverflowDetail = function (detail, overflowDetail){
+        var newDetail = {busy: false, fail: false, trunkLimit: false, trunkId: ""};
+        detail.overflows.splice((detail.overflows.indexOf(overflowDetail)+1),0, newDetail);
+    }
+
+    $scope.removeOverflowDetail = function (detail, overflowDetail) {
+        detail.overflows.splice( detail.overflows.indexOf(overflowDetail), 1 );
+    }
+
+    $scope.createOverflow = function (detail){
+        if(!detail.overflows){
+            var overflow = new Array;
+            overflow.push({busy: false, fail: false, trunkLimit: false, trunkId: ""});
+            detail.overflows = overflow;
+        }
+    }
+
+    $scope.removeOverflow = function (detail){
+        detail.overflows = detail.overflows.filter(function(value){
+            return value.trunkId;
+        });
+        if(!detail.overflows.length){
+            delete detail.overflows;
+        }
+    }
 });
