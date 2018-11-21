@@ -46,7 +46,7 @@
             <thead>
                 <th width="5%"></th>
                 <th><a href="" ng-click="orderBy('name')">Nome</a></th>
-                <th><a href="" ng-click="orderBy('profile')">Perfil</a></th>
+                <th>Perfil</th>
             </thead>
             <tr ng-class="{'selected': callback.selected}" ng-repeat="callback in callbacks | filter:search | orderBy:orderField:direction track by callback.id">
                 <td>
@@ -55,8 +55,8 @@
                         <div class="control_indicator"></div>
                     </label>
                 </td>
-                <td><a href="#!newCallback/{{callback.id}}">{{callback.name}} <span ng-show="{{::callback.createdAt | new: 2}}" class="badge badge-pill badge-success">Novo</span></a></td>
-                <td>{{callback.profileId}}</td>
+                <td><a href="#!newCallback/{{callback.id}}">{{::callback.name}} <span ng-show="{{::callback.createdAt | new: 2}}" class="badge badge-pill badge-success">Novo</span></a></td>
+                <td style="text-align: center">{{::callback.Profile.name}}</td>
             </tr>
         </table>
     </div>
