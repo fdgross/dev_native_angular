@@ -11,7 +11,7 @@
 </nav>
 <div class="main">
     <div class="container">
-        <form name="mohForm">
+        <form name="mohForm" enctype="multipart/form-data">
             <div class="form-group row">
                 <label for="name" class="col-sm-2 col-form-label">Nome:</label>
                 <div class="col-sm-6">
@@ -24,6 +24,44 @@
                 <div class="col-sm-6">
                     <textarea class="form-control" ng-model="moh.description" name="description" placeholder="Descrição"></textarea>
                 </div>
+            </div>
+            <div class="form-group row">
+                <label for="audio" class="col-sm-2 col-form-label">Audio:</label>
+                <div class="col-sm-6">
+                    <input type="file" accept="audio/WAV, audio/MP3" file-model="currentFile" class="form-control" id="currentFile"/>
+                </div>
+                <div class="col-sm-2">
+                    <button ng-click="uploadFile(currentFile, moh)" class="btn btn-primary btn-sm" ng-disabled="audioError || !currentFile || mohForm.$invalid">Upload</button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="audio" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-6">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert" ng-show="audioError">
+                        Arquivo não suportado. Utilize WAV ou MP3.
+                    </div>
+                    <div class="progress">
+                        <div ng-show="fileUploadProgress" class="progress-bar progress-bar-striped" role="progressbar" ng-style="myStyle" aria-valuenow="{{fileUploadProgress}}" aria-valuemin="0" aria-valuemax="100">{{fileUploadProgress}}%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row" >
+                <label for="audio" class="col-sm-2 col-form-label">Arquivos carregados:</label>
+                <div class="col-sm-6" ng-show="!moh.files || moh.files.length === 0">Nenhum arquivo carregado.</div>
+                <ul class="list-group col-sm-10" ng-show="moh.files">
+                    <li ng-repeat="file in moh.files track by $index" class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="col-sm-5">
+                            {{file.name}}
+                        </div>
+                        <div class="col-sm-5">
+                            <audio src="{{baseUrl}}/uploads/mohs/{{moh.id}}/{{file.name}}" preload="none" controls class="link" ng-if="!file.new"></audio>
+                            <audio src="{{baseUrl}}/uploads/uploads_tmp/{{file.name}}" preload="none" controls class="link" ng-if="file.new"></audio>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-danger btn-sm" ng-click="removeFile(file, moh, $index)" ng-hide="group.conditionGroup.length === 1" title="Excluir"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </form>
 

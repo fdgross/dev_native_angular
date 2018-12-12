@@ -1,5 +1,6 @@
-angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, ivrs, ivrsAPI, queues, peers, $location) {
+angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, ivrs, ivrsAPI, uploadsAPI, queues, peers, $location, $timeout, config) {
 
+    $scope.baseUrl = config.baseUrl;
     $scope.queues = queues.data;
     $scope.peers = peers.data;
     
@@ -97,14 +98,14 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
                     break;
                 case "playback":
                     objDetail.name = "Tocar áudio";
-                    objDetail.playbackAudio = objParameters.playbackAudio;
+                    objDetail.file = {name: objParameters.file, new: false};
                     break;
                 case "read":
                     objDetail.name = "Tocar áudio e capturar dígitos";
                     objDetail.readTimeout = objParameters.readTimeout;
                     objDetail.readDigits = objParameters.readDigits;
                     objDetail.readVariable = objParameters.readVariable;
-                    objDetail.readAudio = objParameters.readAudio;
+                    objDetail.file = {name: objParameters.file, new: false};
                     break;
                 case "custom":
                     objDetail.name = "Personalizado";
@@ -212,6 +213,19 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
                         thenCommand: detail.thenCommand[0]
                     };
                     break;
+                case "playback":
+                    parameters = {
+                        file: detail.file.name,
+                    }
+                    break;
+                case "read":
+                    parameters = {
+                        readTimeout: detail.readTimeout,
+                        readDigits:detail.readDigits,
+                        readVariable: detail.readVariable,
+                        file: detail.file.name,
+                    }
+                    break;
                 case "timeCondition":
                     var parameterDows = new Array;
                     angular.forEach(detail.dows, function(dow, dowKey){
@@ -262,4 +276,27 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
     $scope.removeCommand = function(array, item){
         array.splice(item,1);
     }
+
+    $scope.uploadFile = function (currentFile, item) {
+        var file = currentFile;
+        var promise = uploadsAPI.saveUploads(file, function (e) {
+            if (e.lengthComputable) {
+                var progressBar = Math.floor((e.loaded / e.total) * 100);
+                item.fileUploadProgress = progressBar;
+                item.myStyle = {"width": progressBar+"%"};
+                $timeout(function () { 
+                    delete item.fileUploadProgress; 
+                    delete item.myStyle; 
+                }, 2000);
+            }
+        });
+
+        promise.then(function (response) {
+            item.file = {'name': currentFile.name, 'new': true}
+        }, function (error) {
+            console.log(error);
+            $scope.serverResponse = 'An error has occurred';
+        });
+
+    };
 });

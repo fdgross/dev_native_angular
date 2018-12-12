@@ -13,13 +13,13 @@
         </div>
         <div class="sidebar-header">
             <div class="user-pic">
-                <img class="img-responsive img-rounded" src="assets/img/avatars/1-call-center.png" alt="User picture">
+                <img class="img-responsive img-rounded" ng-src="assets/img/avatars/{{loggedUserAvatar}}" alt="{{loggedUserUsername}}">
             </div>
             <div class="user-info">
-                <span class="user-name">Jhon
-                    <strong>Smith</strong>
+                <span class="user-name">
+                    <strong>{{loggedUserName}}</strong>
                 </span>
-                <span class="user-role">Administrator</span>
+                <span class="user-role">{{loggedUserUsername}}</span>
                 <span class="user-status">
                     <i class="fa fa-circle"></i>
                     <span>Online</span>
@@ -29,31 +29,31 @@
         <div class="sidebar-menu">
             <ul>
                 <li>
-                    <a href="#!/contacts">
+                    <a href="#!/contacts" ng-if="loggedUserPermissions.indexOf('contacts') !== -1">
                         <i class="fa fa-address-book"></i>
                         <span>Agenda Pública</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#!/meetmes">
+                    <a href="#!/meetmes" ng-if="loggedUserPermissions.indexOf('meetmes') !== -1">
                         <i class="fa fa-comments"></i>
                         <span>Conferências</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#!/queues">
+                    <a href="#!/queues" ng-if="loggedUserPermissions.indexOf('queues') !== -1">
                         <i class="fa fa-user-friends"></i>
                         <span>Filas</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#!/features">
+                    <a href="#!/features" ng-if="loggedUserPermissions.indexOf('features') !== -1">
                         <i class="fa fa-briefcase"></i>
                         <span>Funcionalidades</span>
                     </a>
                 </li>
                 <li class="sidebar-dropdown">
-                    <a>
+                    <a  ng-if="loggedUserPermissions.indexOf('serviceHours') !== -1">
                         <i class="fa fa-clock"></i>
                         <span>Horários de Atendimento</span>
                     </a>
@@ -69,13 +69,13 @@
                     </div>
                 </li>
                 <li>
-                    <a href="#!/mohs">
+                    <a href="#!/mohs" ng-if="loggedUserPermissions.indexOf('mohs') !== -1">
                         <i class="fa fa-music"></i>
                         <span>Músicas de Espera</span>
                     </a>
                 </li>
-                <li class="sidebar-dropdown">
-                    <a>
+                <li class="sidebar-dropdown" >
+                    <a ng-if="loggedUserPermissions.indexOf('routes') !== -1">
                         <i class="fa fa-project-diagram"></i>
                         <span>Plano de Discagem</span>
                     </a>
@@ -96,8 +96,8 @@
                         </ul>
                     </div>
                 </li>
-                <li class="sidebar-dropdown">
-                    <a>
+                <li class="sidebar-dropdown"  >
+                    <a ng-if="loggedUserPermissions.indexOf('peers') !== -1">
                         <i class="fa fa-phone"></i>
                         <span>Ramais</span>
                     </a>
@@ -122,31 +122,31 @@
                     </div>
                 </li>
                 <li>
-                    <a href="#!/customRules">
+                    <a href="#!/customRules" ng-if="loggedUserPermissions.indexOf('customRules') !== -1">
                         <i class="fa fa-code-branch"></i>
                         <span>Regras Customizadas</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <i class="fa fa-chart-line"></i>
+                    <a href="#" ng-if="loggedUserPermissions.indexOf('reports') !== -1">
+                        <i class="fa fa-chart-line" ></i>
                         <span>Relatórios</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#!/trunks">
+                    <a href="#!/trunks" ng-if="loggedUserPermissions.indexOf('trunks') !== -1">
                         <i class="fa fa-exchange-alt"></i>
                         <span>Troncos</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#!/ivrs">
+                    <a href="#!/ivrs" ng-if="loggedUserPermissions.indexOf('ivrs') !== -1">
                         <i class="fa fa-sitemap"></i>
                         <span>URAs</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#!/users">
+                    <a href="#!/users" ng-if="loggedUserPermissions.indexOf('users') !== -1">
                         <i class="fa fa-user"></i>
                         <span>Usuários</span>
                     </a>
@@ -280,7 +280,7 @@
             </div>
         </div>
         <div>
-            <a href="#">
+            <a href="#!/login">
                 <i class="fa fa-power-off"></i>
             </a>
         </div>

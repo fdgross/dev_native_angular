@@ -1,0 +1,22 @@
+<div class="login">
+    <div class="wrap-login100">
+        <form class="login100-form">
+            <span class="login100-form-title">
+                    <div class="login100-pic" data-tilt>
+                            <img src="assets/img/logo_native_vertical.png" alt="IMG">
+                        </div>
+            </span>
+
+            <input class="form-control" type="text" name="email" ng-model="userLogin.username" ng-required="true" placeholder="Usuário">
+            <input class="form-control" type="password" name="password" ng-model="userLogin.password" ng-required="true" placeholder="Senha">
+            
+            <div ng-show="userLogin.error" class="alert alert-danger" role="alert">
+                Usuário ou senha incorretos. Tente novamente.
+            </div>
+
+            <div class="container-login100-form-btn">
+                <button class="login100-form-btn" ng-click="login(userLogin)" ng-disabled="callbackForm.$invalid">Login</button>
+            </div>
+        </form>
+    </div>
+</div>

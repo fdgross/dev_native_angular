@@ -1,13 +1,38 @@
-angular.module("nativeIP").controller("callbacksController", function ($scope, callback, callbacks, profiles, callbacksAPI, $location) {
+angular.module("nativeIP").controller("callbacksController", function ($scope, callback, callbacks, profiles, peers, ivrs, queues, callbacksAPI, $location, $filter) {
 
     $scope.profiles = profiles.data;
+    $scope.peers = peers.data;
+    $scope.ivrs = ivrs.data;
+    $scope.queues = queues.data;
 
     if(callback){
         $scope.callback = callback.data;
+        $scope.callback.destination = parseInt($scope.callback.destination);
     }
 
     if(callbacks){
         $scope.callbacks = callbacks.data;
+
+        angular.forEach($scope.callbacks, function(callback) {
+            var destinationId = parseInt(callback.destination);
+            switch (callback.destinationType) {
+                case 'peer':
+                    callback.destinationTypeName = 'Ramal';
+                    var peer = $filter('filter')($scope.peers, {id: destinationId}, true)[0];
+                    callback.destinationName = peer.username+" - "+peer.name;
+                    break;
+                case 'queue':
+                    callback.destinationTypeName = 'Fila';
+                    var queue = $filter('filter')($scope.queues, {id: destinationId}, true)[0];
+                    callback.destinationName = queue.name;
+                    break;
+                case 'ivr':
+                    callback.destinationTypeName = 'URA';
+                    var ivr = $filter('filter')($scope.ivrs, {id: destinationId}, true)[0];
+                    callback.destinationName = ivr.name;
+                    break;
+            }
+        });
 
         $scope.deleteCallbacks = function (callbacks){
             callbacks.filter(function (callback){
@@ -63,4 +88,8 @@ angular.module("nativeIP").controller("callbacksController", function ($scope, c
             $location.path("/callbacks");
         });
     };
+
+    $scope.emptyDestination = function (callback) {
+        delete callback.destination;
+    }
 });

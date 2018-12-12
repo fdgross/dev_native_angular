@@ -1,4 +1,4 @@
-angular.module("nativeIP").controller("peersController", function ($scope, peer, peers, peersAPI, $location, categories, groups, profiles, costCenters, $filter) {
+angular.module("nativeIP").controller("peersController", function ($scope, $rootScope, peer, peers, peersAPI, $location, categories, groups, profiles, costCenters, $filter, $window) {
     $scope.categories = categories.data;
     $scope.groups = groups.data;
     $scope.profiles = profiles.data;

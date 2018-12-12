@@ -34,6 +34,35 @@
                     </select>
                 </div>
             </div>
+            <div class="form-group row">
+                <label for="profile" class="col-sm-2 col-form-label">Tipo de entrada do retorno:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" ng-model="callback.destinationType" ng-change="emptyDestination(callback)"
+                        name="type" ng-required="true">
+                        <option value="">Selecione um Tipo</option>
+                        <option value="queue">Fila</option>
+                        <option value="peer">Ramal</option>
+                        <option value="ivr">URA</option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <select class="form-control" ng-model="callback.destination" id="callback.destination" name="destinationQueue"
+                        ng-if="callback.destinationType === 'queue'">
+                        <option value="">Selecione uma Fila</option>
+                        <option ng-repeat="queue in queues | orderBy:'name'" ng-value="queue.id">{{queue.name}}</option>
+                    </select>
+                    <select class="form-control" ng-model="callback.destination" id="callback.destination" name="destinationPeer"
+                        ng-if="callback.destinationType === 'peer'">
+                        <option value="">Selecione um Ramal</option>
+                        <option ng-repeat="peer in peers | orderBy:'name'" ng-value="peer.id">{{peer.username}} - {{peer.name}}</option>
+                    </select>
+                    <select class="form-control" ng-model="callback.destination" id="callback.destination" name="destinationIvr"
+                        ng-if="callback.destinationType === 'ivr'">
+                        <option value="">Selecione uma URA</option>
+                        <option ng-repeat="ivr in ivrs | orderBy:'name'" ng-value="ivr.id">{{ivr.name}}</option>
+                    </select>
+                </div>
+            </div>
         </form>
 
         <div ng-show="callbackForm.name.$dirty" ng-messages="callbackForm.name.$error">

@@ -1173,6 +1173,15 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             profiles: function () {
                 return "";
+            },
+            peers: function (peersAPI) {
+                return peersAPI.getPeers();
+            },
+            queues: function (queuesAPI) {
+                return queuesAPI.getQueues();
+            },
+            ivrs: function (ivrsAPI) {
+                return ivrsAPI.getIvrs();
             }
         }
     });
@@ -1189,6 +1198,15 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             profiles: function (profilesAPI) {
                 return profilesAPI.getProfiles();
+            },
+            peers: function (peersAPI) {
+                return peersAPI.getPeers();
+            },
+            queues: function (queuesAPI) {
+                return queuesAPI.getQueues();
+            },
+            ivrs: function (ivrsAPI) {
+                return ivrsAPI.getIvrs();
             }
         }
     });
@@ -1205,6 +1223,15 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             profiles: function (profilesAPI) {
                 return profilesAPI.getProfiles();
+            },
+            peers: function (peersAPI) {
+                return peersAPI.getPeers();
+            },
+            queues: function (queuesAPI) {
+                return queuesAPI.getQueues();
+            },
+            ivrs: function (ivrsAPI) {
+                return ivrsAPI.getIvrs();
             }
         }
     });
@@ -1222,10 +1249,21 @@ angular.module("nativeIP").config(function ($routeProvider){
      * END ROUTER FOR ERROR
      */
 
+     /**
+     * ROUTER FOR LOGIN
+     */
+    $routeProvider.when("/login", {
+        templateUrl: "view/login.html",
+        controller: "authController"
+    });
+    /**
+     * END ROUTER FOR ERROR
+     */
+
     /**
      * TODO: alterar para index
      * 
      * DEFAULT ROUTER
      */
-    $routeProvider.otherwise({redirectTo: "/peers"});
+    $routeProvider.otherwise({redirectTo: "/login"});
 });

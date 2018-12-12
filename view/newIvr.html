@@ -121,8 +121,25 @@
     <div class="col-sm-2">
         <input type="text" class="form-control" ng-model="item.readVariable" placeholder="Variável"/>
     </div>
-    <div class="col-sm-6">
-        <input type="text" class="form-control" ng-model="item.readAudio" placeholder="Arquivo"/>
+    <div class="col-sm-5">
+        <input type="file" accept="audio/WAV, audio/MP3" file-model="currentFile" class="form-control" id="currentFile" />
+        <div ng-show="audioError">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" >
+                Arquivo não suportado. Utilize WAV ou MP3.
+            </div>
+        </div>
+        <div>
+            <div class="progress" ng-show="item.fileUploadProgress" >
+                <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="item.myStyle" aria-valuenow="{{item.fileUploadProgress}}" aria-valuemin="0" aria-valuemax="100">{{item.fileUploadProgress}}%</div>
+            </div>
+        </div>
+        <div ng-show="item.file">
+            <audio src="{{baseUrl}}/uploads/ivrs/{{ivr.id}}/{{item.file.name}}" preload="none" controls class="link" ng-if="!item.file.new"></audio>
+            <audio src="{{baseUrl}}/uploads/uploads_tmp/{{item.file.name}}" preload="none" controls class="link" ng-if="item.file.new"></audio>
+        </div>
+    </div>
+    <div class="col-sm-1">
+        <button ng-click="uploadFile(currentFile, item)" class="btn btn-primary btn-sm" ng-disabled="audioError || !currentFile || ivrForm.$invalid">Upload</button>
     </div>
 </script>
 
@@ -136,8 +153,25 @@
 </script>
 
 <script type="text/ng-template" id="playback.html">
-    <div class="col-sm-4">
-        <input type="text" class="form-control" ng-model="item.playbackAudio" placeholder="Arquivo"/>
+    <div class="col-sm-10">
+        <input type="file" accept="audio/WAV, audio/MP3" file-model="currentFile" class="form-control" id="currentFile"/>
+    </div>
+    <div class="col-sm-2">
+        <button ng-click="uploadFile(currentFile, item)" class="btn btn-primary btn-sm" ng-disabled="audioError || !currentFile || ivrForm.$invalid">Upload</button>
+    </div>
+    <div class="col-sm-10" ng-show="audioError">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" >
+            Arquivo não suportado. Utilize WAV ou MP3.
+        </div>
+    </div>
+    <div class="col-sm-10">
+        <div class="progress" ng-show="item.fileUploadProgress" >
+            <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="item.myStyle" aria-valuenow="{{item.fileUploadProgress}}" aria-valuemin="0" aria-valuemax="100">{{item.fileUploadProgress}}%</div>
+        </div>
+    </div>
+    <div class="col-sm-10" ng-show="item.file">
+        <audio src="{{baseUrl}}/uploads/ivrs/{{ivr.id}}/{{item.file.name}}" preload="none" controls class="link" ng-if="!item.file.new"></audio>
+        <audio src="{{baseUrl}}/uploads/uploads_tmp/{{item.file.name}}" preload="none" controls class="link" ng-if="item.file.new"></audio>
     </div>
 </script>
 

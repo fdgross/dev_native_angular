@@ -1,7 +1,11 @@
 angular.module("nativeIP").factory("loadingInterceptor", function($q, $rootScope, $timeout){
     return {
         request: function(config){
+            var url = config.url;
             $rootScope.loading = true;
+            if(url.indexOf('uploads') > -1){
+                $rootScope.loading = false;
+            }
             return config;
         },
         requestError: function(rejection){

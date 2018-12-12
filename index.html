@@ -29,6 +29,7 @@
     <script src="js/native.js"></script>
     
     <script src="js/controllers/nativeIPController.js"></script>
+    <script src="js/controllers/authController.js"></script>
     <script src="js/controllers/callbacksController.js"></script>
     <script src="js/controllers/categoriesController.js"></script>
     <script src="js/controllers/costCentersController.js"></script>
@@ -50,6 +51,7 @@
     <script src="js/controllers/trunksController.js"></script>
     <script src="js/controllers/usersController.js"></script>
 
+    <script src="js/services/authAPIService.js"></script>
     <script src="js/services/callbacksAPIService.js"></script>
     <script src="js/services/categoriesAPIService.js"></script>
     <script src="js/services/contactsAPIService.js"></script>
@@ -69,6 +71,7 @@
     <script src="js/services/queuesAPIService.js"></script>
     <script src="js/services/serviceHoursAPIService.js"></script>
     <script src="js/services/trunksAPIService.js"></script>
+    <script src="js/services/uploadsAPIService.js"></script>
     <script src="js/services/usersAPIService.js"></script>
     
     <script src="js/config/routeConfig.js"></script>
@@ -79,16 +82,18 @@
     <script src="js/filters/newFilter.js"></script>
     <script src="js/filters/peerListFilter.js"></script>
     <script src="js/directives/uiAlertDirective.js"></script>
+    <script src="js/directives/fileModelDirective.js"></script>
     <script src="js/directives/uiDateDirective.js"></script>
     <script src="js/interceptors/timestampInterceptor.js"></script>
+    <script src="js/interceptors/tokenInterceptor.js"></script>
     <script src="js/interceptors/errorInterceptor.js"></script>
     <script src="js/interceptors/loadingInterceptor.js"></script>
     
 </head>
 
 <body>
-    <div class="page-wrapper chiller-theme bg1 toggled">
-        <div ng-include="'view/sidebar.html'"></div>
+    <div ng-class="logged ? 'page-wrapper chiller-theme bg1 toggled' : 'page-wrapper chiller-theme bg1'">
+        <div ng-include="'view/sidebar.html'" ng-show="logged"></div>
         <main class="page-content">
             <div class="container-fluid">
                 <div class="row">
