@@ -1,0 +1,92 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active"><i class="fa fa-tachometer-alt"></i> Informações do Servidor</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card border-info text-info bg-light md-3 text-center">
+                    <h5 class="card-header">UPTIME</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">{{uptime | secondsToDateTime}}</h5>
+                        <p class="card-text"><small class="text-muted">Horário do sistema: {{curtime | date:'dd/MM/yyyy HH:mm:ss'}}</small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="chart-container"> 
+                    <pie-chart data="cpuChart.data" options="cpuChart.options"></pie-chart>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="chart-container"> 
+                    <pie-chart data="memChart.data" options="memChart.options"></pie-chart>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="chart-container"> 
+                    <pie-chart data="diskChart.data" options="diskChart.options"></pie-chart>
+                </div>
+            </div>
+        </div>
+        <br>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-action active" style="text-align: center"><b>SERVIÇOS</b></li>
+                    <li ng-repeat="service in serviceList"
+                    ng-class='service.running ? "list-group-item list-group-item-success d-flex justify-content-between align-items-center" : "list-group-item list-group-item-danger d-flex justify-content-between align-items-center"'>
+                        {{service.name}}
+                        <span class="badge badge-success badge-pill" ng-if="service.running">RODANDO</span>
+                        <span class="badge badge-danger badge-pill" ng-if="!service.running">PARADO</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-action active" style="text-align: center"><b>PARTIÇÕES</b></li>
+                    <li ng-repeat="disk in disks"
+                    class="list-group-item list-group-item-{{disk.diskClass}} d-flex justify-content-between align-items-center">
+                        {{disk.mount}}
+                        <span class="badge badge-{{disk.diskClass}} badge-pill">{{disk.use}} %</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <br>
+        <div class="card-deck">
+                <div class="card border-success mb-3 text-success text-center">
+                    <h5 class="card-header"><b><a href="#!/peers" class="text-success">RAMAIS</a></b></h5>
+                    <div class="card-body text-success">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><h5 class="card-title">{{countPeersRegistered}} registrados</h5></li>
+                            <li class="list-group-item"><p class="card-text">{{countPeers}} cadastrados</p></li>
+                        </ul>
+                        <p class="card-text"><small class="text-muted">Última atualização {{peersLastModification | date:'dd/MM/yyyy HH:mm:ss'}}</small></p>
+                    </div>
+                </div>
+                <div class="card border-success mb-3 text-success text-center">
+                    <h5 class="card-header"><b>LIGAÇÕES</b></h5>
+                    <div class="card-body text-success">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><h5 class="card-title">1 ativa(s)</h5></li>
+                            <li class="list-group-item"><p class="card-text">9 chamando</p></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card border-success mb-3 text-success text-center">
+                    <h5 class="card-header"><b><a href="#!/trunks" class="text-success">TRONCOS</a></b></h5>
+                    <div class="card-body text-success">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">TRONCO1 <span class="badge badge-success badge-pill">3</span></li>
+                            <li class="list-group-item">TRONCO2 <span class="badge badge-success badge-pill">4</span></li>
+                            <li class="list-group-item text-danger">TRONCO3</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-angular.module("nativeIP", ["ngMessages", "ngRoute", "ngLocale", "ui.bootstrap", "ui.bootstrap.tpls", "dndLists"]).run(run);
+angular.module("nativeIP", ["ngMessages", "ngRoute", "ngLocale", "ui.bootstrap", "ui.bootstrap.tpls", "dndLists", "n3-pie-chart"]).run(run);
 
 function run($rootScope, $http, $location, $window) {
     //Aqui iremos redirecionar para a página de Login, caso o usuário não esteja logado:

@@ -1,4 +1,4 @@
-angular.module("nativeIP").controller("authController", function ($scope, $rootScope, authAPI, usersAPI, $location, $window) {
+angular.module("nativeIP").controller("authController", function ($scope, $rootScope, authAPI, $location, $window) {
 
     authAPI.logout();
 
@@ -21,7 +21,7 @@ angular.module("nativeIP").controller("authController", function ($scope, $rootS
             $rootScope.loggedUserPermissions = response.data.user.permissions;
             $rootScope.loggedUserAvatar = $window.localStorage.loggedUserAvatar;
             
-            $location.path("/peers");
+            $location.path("/serverInfo");
         }, function (error){
             user.error = true;
             $location.path("/login");

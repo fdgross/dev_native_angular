@@ -618,6 +618,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             peers: function () {
                 return "";
             },
+            apisCalls: function () {
+                return "";
+            },
         }
     });
 
@@ -637,6 +640,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             peers: function (peersAPI) {
                 return peersAPI.getPeers();
             },
+            apisCalls: function (apisCallsAPI) {
+                return apisCallsAPI.getApisCalls();
+            },
         }
     });
 
@@ -655,6 +661,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             peers: function (peersAPI) {
                 return peersAPI.getPeers();
+            },
+            apisCalls: function (apisCallsAPI) {
+                return apisCallsAPI.getApisCalls();
             },
         }
     });
@@ -1240,6 +1249,60 @@ angular.module("nativeIP").config(function ($routeProvider){
      */
 
     /**
+     * ROUTER FOR APIS
+     */
+    $routeProvider.when("/apis", {
+        templateUrl: "view/apis.html",
+        controller: "apisController",
+        resolve: {
+            apis: function (apisAPI) {
+                return apisAPI.getApis();
+            },
+            api: function () {
+                return "";
+            },
+            apisCalls: function (apisCallsAPI) {
+                return apisCallsAPI.getApisCalls();
+            },
+        }
+    });
+
+    $routeProvider.when("/newApi/:id", {
+        templateUrl: "view/newApi.html",
+        controller: "apisController",
+        resolve: {
+            apis: function () {
+                return "";
+            },
+            api: function (apisAPI, $route) {
+                return apisAPI.getApi($route.current.params.id);
+            },
+            apisCalls: function () {
+                return "";
+            },
+        }
+    });
+
+    $routeProvider.when("/newApi", {
+        templateUrl: "view/newApi.html",
+        controller: "apisController",
+        resolve: {
+            apis: function () {
+                return "";
+            },
+            api: function () {
+                return "";
+            },
+            apisCalls: function () {
+                return "";
+            },
+        }
+    });
+    /**
+     * END ROUTER FOR APIS
+     */
+
+    /**
      * ROUTER FOR ERROR
      */
     $routeProvider.when("/error", {
@@ -1255,6 +1318,22 @@ angular.module("nativeIP").config(function ($routeProvider){
     $routeProvider.when("/login", {
         templateUrl: "view/login.html",
         controller: "authController"
+    });
+    /**
+     * END ROUTER FOR ERROR
+     */
+
+    /**
+     * ROUTER FOR SERVERINFO
+     */
+    $routeProvider.when("/serverInfo", {
+        templateUrl: "view/serverInfo.html",
+        controller: "serverInfoController",
+        resolve: {
+            peers: function (peersAPI) {
+                return peersAPI.getPeers();
+            }
+        }
     });
     /**
      * END ROUTER FOR ERROR

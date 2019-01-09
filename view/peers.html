@@ -59,14 +59,27 @@
                     </label>
                 </td>
                 <td style="text-align: center">{{::peer.username}}</td>
-                <td><a href="#!newPeer/{{peer.id}}">{{::peer.name | name | ellipsis:50}} <span ng-show="{{::peer.createdAt | new: 2}}" class="badge badge-pill badge-success">Novo</span></a></td>
+                <td>
+                    <a href="#!newPeer/{{peer.id}}">
+                        {{::peer.name | name | ellipsis:50}} 
+                        <span ng-show="{{::peer.createdAt | new: 2}}" class="badge badge-pill badge-success">Novo</span>
+                    </a>
+                </td>
                 <td style="text-align: center">{{::peer.Profile.name}}</td>
                 <td style="text-align: center">{{::peer.Category.name}}</td>
                 <td style="text-align: center;">
                     <h6>
-                        <span ng-show="{{peer.sipRegStatus === 'Registered'}} || {{peer.sipRegStatus === 'Reachable'}}" class="badge badge-success">SIP {{peer.sipIp}}</span>
-                        <span ng-show="{{peer.iaxRegStatus === 'Registered'}} || {{peer.iaxRegStatus === 'Reachable'}}" class="badge badge-success">IAX {{peer.iaxIp}}</span>
-                        <span ng-show="{{peer.sipRegStatus !== 'Registered'}} && {{peer.sipRegStatus !== 'Reachable'}} && {{peer.iaxRegStatus !== 'Reachable'}} && {{peer.iaxRegStatus !== 'Reachable'}}" class="badge badge-secondary">Não Registrado</span>
+                        <span ng-show="{{peer.sipRegStatus === 'Registered'}} 
+                                        || {{peer.sipRegStatus === 'Reachable'}}" 
+                                        class="badge badge-success">SIP {{peer.sipIp}}</span>
+                        <span ng-show="{{peer.iaxRegStatus === 'Registered'}} 
+                                        || {{peer.iaxRegStatus === 'Reachable'}}" 
+                                        class="badge badge-success">IAX {{peer.iaxIp}}</span>
+                        <span ng-show="{{peer.sipRegStatus !== 'Registered'}} 
+                                        && {{peer.sipRegStatus !== 'Reachable'}} 
+                                        && {{peer.iaxRegStatus !== 'Registered'}} 
+                                        && {{peer.iaxRegStatus !== 'Reachable'}}" 
+                                        class="badge badge-secondary">Não Registrado</span>
                     </h6>
                 </td>
             </tr>

@@ -1,0 +1,209 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active"><i class="fa fa-link"></i> APIs</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-sm">
+                <a class="btn btn-primary btn-block" href="#!newApi">Nova API</a>
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-danger btn-block" ng-if="hasApiSelected" data-toggle="modal" data-target="#modalDelete">Apagar Apis</button>
+            </div>
+            <div class="col-sm">
+                <input class="form-control" type="text" ng-model="search" ng-model-options="{updateOn: 'default blur', debounce:{default: 500, blur: 0}}" placeholder="Procurar" />
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modalDeleteLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDeleteLabel">EXCLUIR APIs</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Você deseja realmente excluir as APIs selecionadas?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                    <button type="button" ng-click="deleteApis(apis)" class="btn btn-danger" data-dismiss="modal">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="table-responsive-md">
+        <div ng-show="returnStatus === 422" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <h6 class="alert-heading"><b>ERRO!</b></h6>
+            Erro ao excluir APIs.
+        </div>
+        <table class="table table-striped table-bordered table-hover" ng-show="apis.length > 0">
+            <thead>
+                <th width="5%"></th>
+                <th><a href="" ng-click="orderBy('name')">Nome</a></th>
+                <th><a href="" ng-click="orderBy('description')">Descrição</a></th>
+            </thead>
+            <tr ng-class="{'selected': apis.selected}" ng-repeat="api in apis | filter:search | orderBy:orderField:direction track by api.id">
+                <td>
+                    <label class="control control-checkbox">
+                        <input type="checkbox" ng-model="api.selected" ng-change="checkApiSelected(apis)"/>
+                        <div class="control_indicator"></div>
+                    </label>
+                </td>
+                <td><a href="#!newApi/{{api.id}}">{{::api.name}} <span ng-show="{{::api.createdAt | new: 2}}" class="badge badge-pill badge-success">Novo</span></a></td>
+                <td>{{::api.description}}</td>
+            </tr>
+        </table>
+    </div>
+    <hr ng-show="apis.length > 0"/>
+    <div class="table-responsive-md">
+        <table class="table table-striped table-bordered table-hover" ng-show="apis.length > 0">
+            <thead>
+                <th>API</th>
+                <th>Chamada</th>
+                <th>Verbo HTTP</th>
+                <th>Método</th>
+                <th style="width: 10%"></th>
+            </thead>
+            <tr ng-repeat="apiCall in apiCalls track by $index">
+                <td>
+                    {{apiCall.apiName}}
+                </td>
+                <td>
+                    {{apiCall.event | apiEventName:defaultEvents}}
+                    <span ng-if="apiCall.event === 'custom'"> - {{apiCall.customEvent}}</span>
+                </td>
+                <td>
+                    {{apiCall.verb}}
+                </td>
+                <td>
+                    {{apiCall.method}}
+                </td>
+                <td style="text-align: center">
+                    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalApiCall" ng-click="editApiCall(apiCall)">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger btn-sm" ng-click="removeApiCall(apiCalls, $index, apiCall)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <div ng-include="'modalApiCall.html'"></div>
+                    
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalApiCall" ng-click="createApiCall()">
+                <span>Nova Chamada de API</span>
+            </button>
+            <div ng-include="'modalApiCall.html'"></div>
+        </div>
+    </div>
+    <hr/>
+</div>
+
+<script type="text/ng-template" id="modalApiCall.html">
+    <div class="modal fade" id="modalApiCall" tabindex="-1" role="dialog" aria-labelledby="modalApiCallLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalApiCallLabel">NOVA CHAMADA DE API</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="api" class="col-sm-2 col-form-label">API:</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" ng-model="apiCallNew.apiId" name="api">
+                                <option value="">Selecione uma opção</option>
+                                <option ng-repeat="api in apis" ng-value="api.id">{{api.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="event" class="col-sm-2 col-form-label">Evento:</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" ng-model="apiCallNew.event" name="event">
+                                <option value="">Selecione uma opção</option>
+                                <option ng-repeat="event in defaultEvents" ng-value="event.event">{{event.name}}</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <input class="form-control" type="text" ng-if="apiCallNew.event === 'custom'"
+                                ng-model="apiCallNew.customEvent" ng-required="true" name="name" placeholder="Nome" 
+                                ng-minlength="3"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="verb" class="col-sm-2 col-form-label">Verbo:</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" ng-model="apiCallNew.verb" name="verb">
+                                <option value="">Selecione uma opção</option>
+                                <option ng-repeat="verb in verbs">{{verb}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="method" class="col-sm-2 col-form-label">Método:</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="text"
+                                ng-model="apiCallNew.method" ng-required="true" name="name" placeholder="Método" 
+                                ng-minlength="3"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="method" class="col-sm-2 col-form-label">Body:</label>
+                        <div class="col-sm-10">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <th>Chave</th>
+                                    <th>Valor</th>
+                                    <th></th>
+                                </thead>
+                                <tr ng-repeat="field in apiCallNew.fields track by $index">
+                                    <td>
+                                        <input class="form-control" type="text"
+                                            ng-model="field.key" ng-required="true" name="key" 
+                                            ng-minlength="1"/>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" type="text"
+                                            ng-model="field.value" name="value"/>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" ng-click="removeFieldFromBody(apiCallNew.fields, $index)"><i class="fa fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10">
+                            <button class="btn btn-info btn-sm" ng-click="addFieldToBody(apiCallNew)">
+                                <span><b>Novo Campo</b> <i class="fa fa-plus"></i></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button class="btn btn-primary" data-dismiss="modal" ng-click="saveApiCall(apiCallNew)">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

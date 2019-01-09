@@ -373,3 +373,8 @@ ul.list-group.list-group-striped li:nth-of-type(even){
   .login100-form-btn:hover {
     background: #357a29;
   }
+
+  .chart-container, .chart {
+    min-width: 10rem;
+    min-height: 10rem;
+  }

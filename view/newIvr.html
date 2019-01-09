@@ -111,6 +111,14 @@
 
 <script type="text/ng-template" id="answer.html"></script>
 <script type="text/ng-template" id="hangup.html"></script>
+<script type="text/ng-template" id="apiCall.html">
+    <div class="col-sm-8">
+        <select class="form-control" ng-model="item.apiCall" name="apiCall">
+            <option value="">Selecione uma Chamada de API</option>
+            <option ng-repeat="apiCall in apisCalls" ng-value="apiCall.id">{{apiCall.apiId}} - {{apiCall.event}}</option>
+        </select>
+    </div>
+</script>
 <script type="text/ng-template" id="read.html">
     <div class="col-sm-2">
         <input type="text" class="form-control" ng-model="item.readTimeout" placeholder="Timeout"/>

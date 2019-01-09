@@ -1,18 +1,20 @@
-angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, ivrs, ivrsAPI, uploadsAPI, queues, peers, $location, $timeout, config) {
+angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, ivrs, ivrsAPI, uploadsAPI, queues, peers, apisCalls, $location, $timeout, config) {
 
     $scope.baseUrl = config.baseUrl;
     $scope.queues = queues.data;
     $scope.peers = peers.data;
+    $scope.apisCalls = apisCalls.data;
     
     $scope.modelCommands = {
         selected: null,
-        allAllowedTypes: ['answer', 'queue', 'condition', 'timeCondition', 'hangup', 'goto', 'dial', 'set', 'playback', 'read', 'custom'],
-        conditionAllowedTypes: ['answer', 'queue', 'hangup', 'goto', 'dial', 'set', 'playback', 'read', 'custom'],
+        allAllowedTypes: ['answer', 'queue', 'condition', 'timeCondition', 'hangup', 'goto', 'dial', 'set', 'playback', 'read', 'custom', 'apiCall'],
+        conditionAllowedTypes: ['answer', 'queue', 'hangup', 'goto', 'dial', 'set', 'playback', 'read', 'custom', 'apiCall'],
         noneAllowedTypes: ['none'],
         type: 'commands',
         noneType: 'none',
         lists: {
             "commands": [
+                {type: "apiCall", name: "API"},
                 {type: "answer", name: "Atender"},
                 {type: "queue", name: "Chamar fila"},
                 {type: "condition", name: "Condição", conditionGroups: [{conditionGroup: [{conditionVariable: "", conditionOperator: "", conditionValue: "", logicalOperator: ""}], logicalOperator: ""}], thenCommand: []},
@@ -35,6 +37,10 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
             var objDetail = {type: detail.command, label: detail.line};
             var objParameters = JSON.parse(detail.parameters);
             switch(detail.command){
+                case "apiCall":
+                    objDetail.name = "API";
+                    objDetail.apiCall = objParameters;
+                    break;
                 case "queue":
                     objDetail.name = "Chamar fila";
                     objDetail.queue = objParameters;
@@ -204,6 +210,9 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
             var parameters = "";
 
             switch (detail.type){
+                case "apiCall":
+                    parameters = detail.apiCall;
+                    break;
                 case "queue":
                     parameters = detail.queue;
                     break;

@@ -3,7 +3,7 @@ angular.module("nativeIP").factory("loadingInterceptor", function($q, $rootScope
         request: function(config){
             var url = config.url;
             $rootScope.loading = true;
-            if(url.indexOf('uploads') > -1){
+            if((url.indexOf('uploads') > -1) || (url.indexOf('serverInfo') > -1)){
                 $rootScope.loading = false;
             }
             return config;
