@@ -1,12 +1,12 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/peers">
+            <a href="#!/peers" class="breadcrumb-item active">
                 <i class="fa fa-phone"></i> Ramais
             </a>
         </li>
         <li class="breadcrumb-item">
-            <a href="#!/profiles">
+            <a href="#!/profiles" class="breadcrumb-item active">
                 Perfis
             </a>
         </li>
@@ -68,7 +68,7 @@
         </div>
         <br>
         <div ng-show="profile.id" class="alert alert-primary" role="alert">
-            Perfil criado em '{{profile.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{profile.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Perfil criado em '{{profile.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{profile.createdBy}}'<span ng-if="profile.createdAt !== profile.updatedAt"> e atualizado pela última vez em '{{profile.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{profile.updatedBy}}'</span>.
         </div>
     </div>
 </div>

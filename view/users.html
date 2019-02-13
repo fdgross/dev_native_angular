@@ -48,14 +48,16 @@
                 <th><a href="" ng-click="orderBy('name')">Nome</a></th>
                 <th><a href="" ng-click="orderBy('username')">Login</a></th>
             </thead>
-            <tr ng-class="{'selected': user.selected}" ng-repeat="user in users | filter:search | orderBy:orderField:direction track by user.id">
+            <tr ng-show="(user.administrator && loggedUserAdmin) || (!user.administrator)" ng-class="{'selected': user.selected}" ng-repeat="user in users | filter:search | orderBy:orderField:direction track by user.id">
                 <td>
                     <label class="control control-checkbox">
                         <input type="checkbox" ng-model="user.selected" ng-change="checkUserSelected(users)"/>
                         <div class="control_indicator"></div>
                     </label>
                 </td>
-                <td><a href="#!newUser/{{user.id}}">{{user.name}} <span ng-show="{{::user.createdAt | new: 2}}" class="badge badge-pill badge-success">Novo</span></a></td>
+                <td>
+                    <a href="#!newUser/{{user.id}}">{{user.name}} <span ng-show="{{::user.createdAt | new: 2}}" class="badge badge-pill badge-success">Novo</span></a>
+                </td>
                 <td>{{user.username}}</td>
             </tr>
         </table>

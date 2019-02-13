@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#!/internalRoutes">
+                <a href="#!/internalRoutes" class="breadcrumb-item active">
                     <i class="fa fa-project-diagram"></i>Rotas Internas
                 </a>
             </li>
@@ -109,7 +109,7 @@
             </div>
             <br>
             <div ng-show="internalRoute.id" class="alert alert-primary" role="alert">
-                Rota criada em '{{internalRoute.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{internalRoute.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+                Rota criada em '{{internalRoute.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{internalRoute.createdBy}}'<span ng-if="internalRoute.createdAt !== internalRoute.updatedAt"> e atualizada pela última vez em '{{internalRoute.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{internalRoute.updatedBy}}'</span>.
             </div>
         </div>
     </div>

@@ -1,12 +1,12 @@
 <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#!/peers">
+                <a href="#!/peers" class="breadcrumb-item active">
                     <i class="fa fa-phone"></i> Ramais
                 </a>
             </li>
             <li class="breadcrumb-item">
-                <a href="#!/categories">
+                <a href="#!/categories" class="breadcrumb-item active">
                     Categorias
                 </a>
             </li>
@@ -146,7 +146,7 @@
             </div>
             <br>
             <div ng-show="category.id" class="alert alert-primary" role="alert">
-                Categoria criada em '{{category.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{category.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+                Categoria criada em '{{category.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{category.createdBy}}'<span ng-if="category.createdAt !== category.updatedAt"> e atualizada pela última vez em '{{category.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{category.updatedBy}}'</span>.
             </div>
         </div>
     </div>

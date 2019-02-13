@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/mohs">
+            <a href="#!/mohs" class="breadcrumb-item active">
                 <i class="fa fa-music"></i> Músicas de Espera
             </a>
         </li>
@@ -89,7 +89,7 @@
         </div>
         <br>
         <div ng-show="moh.id" class="alert alert-primary" role="alert">
-            Música de espera criada em '{{moh.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{moh.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Música de espera criada em '{{moh.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{moh.createdBy}}'<span ng-if="moh.createdAt !== moh.updatedAt"> e atualizada pela última vez em '{{moh.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{moh.updatedBy}}'</span>.
         </div>
     </div>
 </div>

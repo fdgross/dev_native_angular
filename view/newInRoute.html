@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/inRoutes">
+            <a href="#!/inRoutes" class="breadcrumb-item active">
                 <i class="fa fa-project-diagram"></i>Rotas de Entrada
             </a>
         </li>
@@ -139,7 +139,7 @@
         </div>
         <br>
         <div ng-show="inRoute.id" class="alert alert-primary" role="alert">
-            Rota criada em '{{inRoute.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{inRoute.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Rota criada em '{{inRoute.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{inRoute.createdBy}}'<span ng-if="inRoute.createdAt !== inRoute.updatedAt"> e atualizada pela última vez em '{{inRoute.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{inRoute.updatedBy}}'</span>.
         </div>
     </div>
 </div>

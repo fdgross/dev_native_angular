@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/meetmes">
+            <a href="#!/meetmes" class="breadcrumb-item active">
                 <i class="fa fa-comments"></i> Conferências
             </a>
         </li>
@@ -76,7 +76,7 @@
         </div>
         <br>
         <div ng-show="meetme.id" class="alert alert-primary" role="alert">
-            Conferência criada em '{{meetme.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{meetme.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Conferência criada em '{{meetme.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{meetme.createdBy}}'<span ng-if="meetme.createdAt !== meetme.updatedAt"> e atualizada pela última vez em '{{meetme.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{meetme.updatedBy}}'</span>.
         </div>
     </div>
 </div>

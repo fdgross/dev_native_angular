@@ -1,12 +1,12 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/peers">
+            <a href="#!/peers" class="breadcrumb-item active">
                 <i class="fa fa-phone"></i> Ramais
             </a>
         </li>
         <li class="breadcrumb-item">
-            <a href="#!/costCenters">
+            <a href="#!/costCenters" class="breadcrumb-item active">
                 Centros de Custos
             </a>
         </li>
@@ -64,7 +64,7 @@
         </div>
         <br>
         <div ng-show="costCenter.id" class="alert alert-primary" role="alert">
-            Centro de Custos criado em '{{costCenter.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{costCenter.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Centro de Custos criado em '{{costCenter.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{costCenter.createdBy}}'<span ng-if="costCenter.createdAt !== costCenter.updatedAt"> e atualizado pela última vez em '{{costCenter.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{costCenter.updatedBy}}'</span>.
         </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/queues">
+            <a href="#!/queues" class="breadcrumb-item active">
                 <i class="fa fa-user-friends"></i> Filas
             </a>
         </li>
@@ -14,7 +14,7 @@
         <form name="queueForm">
             <div class="form-group row">
                 <label for="name" class="col-sm-2 col-form-label">Nome:</label>
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <input class="form-control" type="text" ng-model="queue.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
                         ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
                 </div>
@@ -336,7 +336,7 @@
         </div>
         <br>
         <div ng-show="queue.id" class="alert alert-primary" role="alert">
-            Fila criada em '{{queue.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{queue.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Fila criada em '{{queue.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{queue.createdBy}}'<span ng-if="queue.createdAt !== queue.updatedAt"> e atualizada pela última vez em '{{queue.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{queue.updatedBy}}'</span>.
         </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/callbacks">
+            <a href="#!/callbacks" class="breadcrumb-item active">
                 <i class="fa fa-project-diagram"></i> Callbacks
             </a>
         </li>
@@ -13,20 +13,20 @@
     <div class="container">
         <form name="callbackForm">
             <div class="form-group row">
-                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                <label for="name" class="col-sm-3 col-form-label">Nome:</label>
                 <div class="col-sm-6">
                     <input class="form-control" type="text" ng-model="callback.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
                         ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
                 </div>
             </div>
             <div class="form-group row">
-                <label for="message" class="col-sm-2 col-form-label">Áudio:</label>
+                <label for="message" class="col-sm-3 col-form-label">Áudio:</label>
                 <div class="col-sm-4">
                     <input class="form-control" type="text" ng-model="callback.message" name="message" placeholder="Arquivo" />
                 </div>
             </div>
             <div class="form-group row">
-                <label for="profile" class="col-sm-2 col-form-label">Perfil para retorno:</label>
+                <label for="profile" class="col-sm-3 col-form-label">Perfil para retorno:</label>
                 <div class="col-sm-4">
                     <select class="form-control" ng-model="callback.profileId" ng-options="profile.id as profile.name for profile in profiles | orderBy:'name'"
                         name="profile" ng-required="true">
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="profile" class="col-sm-2 col-form-label">Tipo de entrada do retorno:</label>
+                <label for="profile" class="col-sm-3 col-form-label">Entrada do retorno:</label>
                 <div class="col-sm-4">
                     <select class="form-control" ng-model="callback.destinationType" ng-change="emptyDestination(callback)"
                         name="type" ng-required="true">
@@ -89,7 +89,7 @@
         </div>
         <br>
         <div ng-show="callback.id" class="alert alert-primary" role="alert">
-            Callback criado em '{{callback.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{callback.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Callback criado em '{{callback.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{callback.createdBy}}'<span ng-if="callback.createdAt !== callback.updatedAt"> e atualizado pela última vez em '{{callback.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{callback.updatedBy}}'</span>.
         </div>
     </div>
 </div>

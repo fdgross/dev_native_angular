@@ -1,18 +1,20 @@
-angular.module("nativeIP").controller("customRulesController", function ($scope, ivr, ivrs, ivrsAPI, uploadsAPI, queues, peers, $location, $timeout, config) {
+angular.module("nativeIP").controller("customRulesController", function ($scope, ivr, ivrs, ivrsAPI, uploadsAPI, queues, peers, apisCalls, $location, $timeout, config, $filter) {
 
     $scope.baseUrl = config.baseUrl;
     $scope.queues = queues.data;
     $scope.peers = peers.data;
+    $scope.apisCalls = $filter('filter')(apisCalls.data, {event: 'custom'}, true);
     
     $scope.modelCommands = {
         selected: null,
-        allAllowedTypes: ['queue', 'condition', 'timeCondition', 'hangup', 'goto', 'dial', 'set', 'playback', 'read', 'custom'],
-        conditionAllowedTypes: ['queue', 'hangup', 'goto', 'dial', 'set', 'playback', 'read', 'custom'],
+        allAllowedTypes: ['queue', 'condition', 'timeCondition', 'hangup', 'goto', 'dial', 'set', 'playback', 'read', 'custom', 'apiCall'],
+        conditionAllowedTypes: ['queue', 'hangup', 'goto', 'dial', 'set', 'playback', 'read', 'custom', 'apiCall'],
         noneAllowedTypes: ['none'],
         type: 'commands',
         noneType: 'none',
         lists: {
             "commands": [
+                {type: "apiCall", name: "API"},
                 {type: "queue", name: "Chamar fila"},
                 {type: "condition", name: "Condição", conditionGroups: [{conditionGroup: [{conditionVariable: "", conditionOperator: "", conditionValue: "", logicalOperator: ""}], logicalOperator: ""}], thenCommand: []},
                 {type: "timeCondition", name: "Condição com horário", dows:{mon: {name: "Seg", checked: false}, tue: {name: "Ter", checked: false}, wed: {name: "Qua", checked: false}, thu: {name: "Qui", checked: false}, fri: {name: "Sex", checked: false}, sat: {name: "Sab", checked: false}, sun: {name: "Dom", checked: false}}, startDay: "", endDay: "", startMonth: "", endMonth: "", startTime: "", endTime: "",thenCommand: []},
@@ -34,6 +36,10 @@ angular.module("nativeIP").controller("customRulesController", function ($scope,
             var objDetail = {type: detail.command, label: detail.line};
             var objParameters = JSON.parse(detail.parameters);
             switch(detail.command){
+                case "apiCall":
+                    objDetail.name = "API";
+                    objDetail.apiCall = objParameters;
+                    break;
                 case "queue":
                     objDetail.name = "Chamar fila";
                     objDetail.queue = objParameters;
@@ -113,17 +119,8 @@ angular.module("nativeIP").controller("customRulesController", function ($scope,
         });
     }
     
-    
-    $scope.customRules = new Array;
-    $scope.ivrs = new Array;
-    angular.forEach(ivrs.data, function(ivr){
-        if(ivr.type === 'customRule'){
-            $scope.customRules.push(ivr);
-        }
-        else{
-            $scope.ivrs.push(ivr);
-        }
-    });
+    $scope.customRules = $filter('filter')(ivrs.data, {type: 'customRule', mode: null}, true);
+    $scope.ivrs = $filter('filter')(ivrs.data, {type: 'ivr'}, true);
 
     $scope.deleteCustomRules = function (customRules){
         customRules.filter(function (customRule){
@@ -200,6 +197,9 @@ angular.module("nativeIP").controller("customRulesController", function ($scope,
             var parameters = "";
 
             switch (detail.type){
+                case "apiCall":
+                    parameters = detail.apiCall;
+                    break;
                 case "queue":
                     parameters = detail.queue;
                     break;

@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#!/events">
+                <a href="#!/events" class="breadcrumb-item active">
                     <i class="fa fa-clock"></i> Eventos / Feriados
                 </a>
             </li>
@@ -149,7 +149,7 @@
             </div>
             <br>
             <div ng-show="event.id" class="alert alert-primary" role="alert">
-                Evento criado em '{{event.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{event.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+                Evento criado em '{{event.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{event.createdBy}}'<span ng-if="event.createdAt !== event.updatedAt"> e atualizado pela última vez em '{{event.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{callback.updatedBy}}'</span>.
             </div>
         </div>
     </div>

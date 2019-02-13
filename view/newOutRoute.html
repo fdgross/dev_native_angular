@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#!/outRoutes">
+                <a href="#!/outRoutes" class="breadcrumb-item active">
                     <i class="fa fa-project-diagram"></i>Rotas de Saída
                 </a>
             </li>
@@ -184,7 +184,7 @@
             </div>
             <br>
             <div ng-show="outRoute.id" class="alert alert-primary" role="alert">
-                Rota criada em '{{outRoute.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{outRoute.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+                Rota criada em '{{outRoute.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{outRoute.createdBy}}'<span ng-if="outRoute.createdAt !== outRoute.updatedAt"> e atualizada pela última vez em '{{outRoute.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{outRoute.updatedBy}}'</span>.
             </div>
         </div>
     </div>

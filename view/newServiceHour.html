@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#!/serviceHours">
+                <a href="#!/serviceHours" class="breadcrumb-item active">
                     <i class="fa fa-clock"></i> Horários de Atendimento
                 </a>
             </li>
@@ -160,7 +160,7 @@
             </div>
             <br>
             <div ng-show="serviceHour.id" class="alert alert-primary" role="alert">
-                Horário criado em '{{serviceHour.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{serviceHour.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+                Horário criado em '{{serviceHour.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{serviceHour.createdBy}}'<span ng-if="serviceHour.createdAt !== serviceHour.updatedAt"> e atualizado pela última vez em '{{serviceHour.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{serviceHour.updatedBy}}'</span>.
             </div>
         </div>
     </div>

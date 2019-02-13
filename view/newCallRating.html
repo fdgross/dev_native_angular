@@ -1,0 +1,171 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="#!/callRatings" class="breadcrumb-item active">
+                <i class="fa fa-code-branch"></i> Avaliações de Atendimento
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" ng-show="callRating.id">Editar Avaliação de Atendimento '{{callRating.name}}'</li>
+        <li class="breadcrumb-item active" aria-current="page" ng-hide="callRating.id">Nova Avaliação de Atendimento</li>
+    </ol>
+</nav>
+<div class="main">
+    <div class="container">
+        <form name="callRatingForm">
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="text" ng-model="callRating.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                        ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="description" class="col-sm-2 col-form-label">Descrição:</label>
+                <div class="col-sm-6">
+                    <textarea class="form-control" ng-model="callRating.description" name="description" placeholder="Descrição"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Áudio principal:</label>
+                <div class="col-sm-5">
+                    <input type="file" accept="audio/WAV, audio/MP3" file-model="currentFile" class="form-control" id="currentFile" />
+                    <div ng-show="audioError">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" >
+                            Arquivo não suportado. Utilize WAV ou MP3.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progress" ng-show="callRating.fileMain.fileUploadProgress" >
+                            <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="callRating.fileMain.myStyle" aria-valuenow="{{callRating.fileMain.fileUploadProgress}}" aria-valuemin="0" aria-valuemax="100">{{callRating.fileMain.fileUploadProgress}}%</div>
+                        </div>
+                    </div>
+                    <div ng-show="callRating.fileMain.file">
+                        <audio src="{{baseUrl}}/uploads/ivrs/{{callRating.id}}/{{callRating.fileMain.file.name}}" preload="none" controls class="link" ng-if="!callRating.fileMain.file.new"></audio>
+                        <audio src="{{baseUrl}}/uploads/uploads_tmp/{{callRating.fileMain.file.name}}" preload="none" controls class="link" ng-if="callRating.fileMain.file.new"></audio>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <button ng-click="uploadFile(currentFile, callRating.fileMain)" class="btn btn-primary btn-sm" ng-disabled="audioError || !currentFile || callRatingForm.$invalid">Upload</button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="timeout" class="col-sm-2 col-form-label">Timeout (s):</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="number" ng-model="callRating.timeout" name="timeout" min=0 placeholder="Timeout"/>
+                </div>
+                <label for="retry" class="col-sm-2 col-form-label">Tentativas:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="number" ng-model="callRating.retry" name="retry" min=0 placeholder="Tentativas"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="timeout" class="col-sm-2 col-form-label">Nota:</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="number" ng-model="callRating.minRate" name="min" min=0 placeholder="Mínimo"/>
+                </div>
+                a
+                <div class="col-sm-2">
+                    <input class="form-control" type="number" ng-model="callRating.maxRate" name="max" min=0 placeholder="Máximo"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Áudio sucesso:</label>
+                <div class="col-sm-5">
+                    <input type="file" accept="audio/WAV, audio/MP3" file-model="currentFileSuccess" class="form-control" id="currentFileSuccess" />
+                    <div ng-show="audioSuccess">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" >
+                            Arquivo não suportado. Utilize WAV ou MP3.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progress" ng-show="callRating.fileSuccess.fileUploadProgress" >
+                            <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="callRating.fileSuccess.myStyle" aria-valuenow="{{callRating.fileSuccess.fileUploadProgress}}" aria-valuemin="0" aria-valuemax="100">{{callRating.fileSuccess.fileUploadProgress}}%</div>
+                        </div>
+                    </div>
+                    <div ng-show="callRating.fileSuccess.file">
+                        <audio src="{{baseUrl}}/uploads/ivrs/{{callRating.id}}/{{callRating.fileSuccess.file.name}}" preload="none" controls class="link" ng-if="!callRating.fileSuccess.file.new"></audio>
+                        <audio src="{{baseUrl}}/uploads/uploads_tmp/{{callRating.fileSuccess.file.name}}" preload="none" controls class="link" ng-if="callRating.fileSuccess.file.new"></audio>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <button ng-click="uploadFile(currentFileSuccess, callRating.fileSuccess)" class="btn btn-primary btn-sm" ng-disabled="audioSuccess || !currentFileSuccess || callRatingForm.$invalid">Upload</button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="name" class="col-sm-2 col-form-label">Áudio erro:</label>
+                <div class="col-sm-5">
+                    <input type="file" accept="audio/WAV, audio/MP3" file-model="currentFileError" class="form-control" id="currentFileError" />
+                    <div ng-show="audioError">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" >
+                            Arquivo não suportado. Utilize WAV ou MP3.
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progress" ng-show="callRating.fileError.fileUploadProgress" >
+                            <div class="progress-bar progress-bar-striped" role="progressbar" ng-style="callRating.fileError.myStyle" aria-valuenow="{{callRating.fileError.fileUploadProgress}}" aria-valuemin="0" aria-valuemax="100">{{callRating.fileError.fileUploadProgress}}%</div>
+                        </div>
+                    </div>
+                    <div ng-show="callRating.fileError.file">
+                        <audio src="{{baseUrl}}/uploads/ivrs/{{callRating.id}}/{{callRating.fileError.file.name}}" preload="none" controls class="link" ng-if="!callRating.fileError.file.new"></audio>
+                        <audio src="{{baseUrl}}/uploads/uploads_tmp/{{callRating.fileError.file.name}}" preload="none" controls class="link" ng-if="callRating.fileError.file.new"></audio>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    <button ng-click="uploadFile(currentFileError, callRating.fileError)" class="btn btn-primary btn-sm" ng-disabled="audioError || !currentFileError || callRatingForm.$invalid">Upload</button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="endAction" class="col-sm-2 col-form-label">Ao finalizar:</label>
+                <div class="col-sm-6 border" style="padding-bottom: 10px; padding-top: 10px;">
+                    <label class="control control-radio">
+                        Desligar
+                        <input type="radio" id="endHangup" ng-model="callRating.endAction" value="hangup" ng-checked="!callRating.id || callRating.endAction === 'hangup'">
+                        <div class="control_indicator"></div>
+                    </label>
+                    <label class="control control-radio">
+                        Direcionar para outra avaliação
+                        <input type="radio" id="endNewRating" ng-model="callRating.endAction" value="newRating">
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row" ng-show="callRating.endAction === 'newRating'">
+                <label for="newRating" class="col-sm-2 col-form-label">Próxima avaliação:</label>
+                <div class="col-sm-6">
+                    <select class="form-control" ng-model="callRating.endNewRating" 
+                        ng-options="newCallRating.id as newCallRating.name for newCallRating in callRatings | orderBy:'name'" 
+                        name="newCallRating">
+                        <option value="">Selecione uma Avaliação</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+
+        <div ng-show="callRatingForm.name.$dirty" ng-messages="callRatingForm.name.$error">
+            <div ng-message="required" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                Por favor, preencha o campo nome!
+            </div>
+            <div ng-message="minlength" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                O campo nome deve ter no mínimo 3 caracteres.
+            </div>
+        </div>
+
+        
+        <hr/>
+        <div class="col-sm-6">
+            <button ng-show="{{callRating.id}}" class="btn btn-primary" ng-click="editCallRating(callRating)" ng-disabled="callRatingForm.$invalid">Salvar</button>
+            <button ng-hide="{{callRating.id}}" class="btn btn-primary" ng-click="addCallRating(callRating)" ng-disabled="callRatingForm.$invalid">Salvar</button>
+            <a class="btn btn-secondary" href="#!callRatings">Voltar</a>
+        </div>
+        <br>
+        <div ng-show="callRating.id" class="alert alert-primary" role="alert">
+            Avaliação de atendimento criada em '{{callRating.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{callRating.createdBy}}'<span ng-if="callRating.createdAt !== callRating.updatedAt"> e atualizada pela última vez em '{{callRating.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{callRating.updatedBy}}'</span>.
+        </div>
+    </div>
+</div>

@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/contacts">
+            <a href="#!/contacts" class="breadcrumb-item active">
                 <i class="fa fa-address-book"></i> Agenda Pública
             </a>
         </li>
@@ -63,7 +63,7 @@
         </div>
         <br>
         <div ng-show="contact.id" class="alert alert-primary" role="alert">
-            Contato criado em '{{contact.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{contact.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Contato criado em '{{contact.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{contact.createdBy}}'<span ng-if="contact.createdAt !== contact.updatedAt"> e atualizado pela última vez em '{{contact.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{contact.updatedBy}}'</span>.
         </div>
     </div>
 </div>

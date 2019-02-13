@@ -1,16 +1,16 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active"><i class="fa fa-sitemap"></i> URAs</li>
+        <li class="breadcrumb-item active"><i class="fa fa-code-branch"></i> Avaliações de Atendimento</li>
     </ol>
 </nav>
 <div class="main">
     <div class="container">
         <div class="row justify-content-between">
             <div class="col-sm">
-                <a class="btn btn-primary btn-block" href="#!newIvr">Nova URA</a>
+                <a class="btn btn-primary btn-block" href="#!newCallRating">Nova Avaliação</a>
             </div>
             <div class="col-sm">
-                <button class="btn btn-danger btn-block" ng-if="hasIvrSelected" data-toggle="modal" data-target="#modalDelete">Apagar URAs</button>
+                <button class="btn btn-danger btn-block" ng-if="hasCallRatingSelected" data-toggle="modal" data-target="#modalDelete">Apagar Avaliações</button>
             </div>
             <div class="col-sm">
                 <input class="form-control" type="text" ng-model="search" ng-model-options="{updateOn: 'default blur', debounce:{default: 500, blur: 0}}" placeholder="Procurar" />
@@ -21,17 +21,17 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalDeleteLabel">EXCLUIR URAS</h5>
+                <h5 class="modal-title" id="modalDeleteLabel">EXCLUIR AVALIAÇÕES DE ATENDIMENTO</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Você deseja realmente excluir as URAs selecionadas?
+                Você deseja realmente excluir as avaliações selecionadas?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
-                <button type="button" ng-click="deleteIvrs(ivrs)" class="btn btn-danger" data-dismiss="modal">Excluir</button>
+                <button type="button" ng-click="deleteCallRatings(callRatings)" class="btn btn-danger" data-dismiss="modal">Excluir</button>
             </div>
             </div>
         </div>
@@ -40,25 +40,23 @@
     <div class="table-responsive-md">
         <div ng-show="returnStatus === 422" class="alert alert-danger alert-dismissible fade show" role="alert">
             <h6 class="alert-heading"><b>ERRO!</b></h6>
-            Erro ao criar URA.
+            Erro ao criar avaliação de atendimento.
         </div>
-        <table class="table table-striped table-bordered table-hover" ng-show="ivrs.length > 0">
+        <table class="table table-striped table-bordered table-hover" ng-show="callRatings.length > 0">
             <thead>
                 <th width="5%"></th>
                 <th><a href="" ng-click="orderBy('name')">Nome</a></th>
                 <th><a href="" ng-click="orderBy('description')">Descrição</a></th>
-                <th><a href="" ng-click="orderBy('extension')">Ramal</a></th>
             </thead>
-            <tr ng-class="{'selected': ivrs.selected}" ng-repeat="ivr in ivrs | filter:search | orderBy:orderField:direction track by ivr.id">
+            <tr ng-class="{'selected': callRatings.selected}" ng-repeat="callRating in callRatings | filter:search | orderBy:orderField:direction track by callRating.id">
                 <td>
                     <label class="control control-checkbox">
-                        <input type="checkbox" ng-model="ivr.selected" ng-change="checkIvrSelected(ivrs)"/>
+                        <input type="checkbox" ng-model="callRating.selected" ng-change="checkCallRatingSelected(callRatings)"/>
                         <div class="control_indicator"></div>
                     </label>
                 </td>
-                <td><a href="#!newIvr/{{ivr.id}}">{{ivr.name}} <span ng-show="{{::ivr.createdAt | new: 2}}" class="badge badge-pill badge-success">Novo</span></a></td>
-                <td>{{ivr.description}}</td>
-                <td>{{ivr.extension}}</td>
+                <td><a href="#!newCallRating/{{callRating.id}}">{{callRating.name}} <span ng-show="{{::callRating.createdAt | new: 2}}" class="badge badge-pill badge-success">Novo</span></a></td>
+                <td>{{callRating.description}}</td>
             </tr>
         </table>
     </div>

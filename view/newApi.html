@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/apis">
+            <a href="#!/apis" class="breadcrumb-item active">
                 <i class="fa fa-link"></i> Apis
             </a>
         </li>
@@ -98,7 +98,7 @@
         </div>
         <br>
         <div ng-show="api.id" class="alert alert-primary" role="alert">
-            API criada em '{{api.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizada pela última vez em '{{api.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            API criada em '{{api.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{api.createdBy}}'<span ng-if="api.createdAt !== api.updatedAt"> e atualizada pela última vez em '{{api.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{api.updatedBy}}'</span>.
         </div>
     </div>
 </div>

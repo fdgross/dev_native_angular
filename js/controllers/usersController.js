@@ -1,8 +1,10 @@
-angular.module("nativeIP").controller("usersController", function ($scope, user, users, permissions, costCenters, usersAPI, $location, $filter) {
+angular.module("nativeIP").controller("usersController", function ($scope, user, users, permissions, costCenters, peers, usersAPI, $location, $filter) {
 
     $scope.permissions = permissions.data;
     $scope.costCenters = costCenters.data;
-
+    $scope.users = users.data;
+    $scope.peers = peers.data;
+    
     $scope.avatars = Array();
     for(i = 1; i <= 50; i++){
         $scope.avatars.push(i+"-call-center.png");
@@ -46,8 +48,14 @@ angular.module("nativeIP").controller("usersController", function ($scope, user,
             case 'reports':
                 permission.displayName = "Relatórios";
                 break;
-            case 'moh':
+            case 'mohs':
                 permission.displayName = "Música de Espera";
+                break;
+            case 'apis':
+                permission.displayName = "APIs";
+                break;
+            case 'cockpit':
+                permission.displayName = "Cockpit";
                 break;
         }
     });
@@ -73,9 +81,20 @@ angular.module("nativeIP").controller("usersController", function ($scope, user,
         }
     }
 
-    if(users){
-        $scope.users = users.data;
+    //REMOVE do array de peers os que já estiverem associados a um usuário
+    if($scope.peers){
+        var arrPeers = $scope.peers;
+        angular.forEach($scope.users, function(loopUser){
+            if(loopUser.peerId){
+                var peer = $filter('filter')(arrPeers, {id: loopUser.peerId}, true)[0];
+                if((peer) && ((($scope.user) && (peer.id != $scope.user.peerId)) || (!$scope.user))){
+                    arrPeers.splice(arrPeers.indexOf(peer), 1);
+                }
+            }
+        });
+    }
 
+    if(users){
         $scope.deleteUsers = function (users){
             users.filter(function (user){
                 if (user.selected){
@@ -128,6 +147,8 @@ angular.module("nativeIP").controller("usersController", function ($scope, user,
         
         user = setPermissionsCostCenter(user);
 
+        console.log(user);
+
         usersAPI.saveUsers(user).then(function (response){
             delete $scope.user;
             $scope.userForm.$setPristine();
@@ -142,6 +163,10 @@ angular.module("nativeIP").controller("usersController", function ($scope, user,
 
         user = setPermissionsCostCenter(user);
 
+        if(user.peerId === ''){
+            user.peerId = null;
+        }
+
         usersAPI.updateUser(user.id, user).then(function (response){
             delete $scope.user;
             $scope.userForm.$setPristine();
@@ -155,7 +180,8 @@ angular.module("nativeIP").controller("usersController", function ($scope, user,
     var setPermissionsCostCenter = function (user) {
         user.permissions = new Array;
         angular.forEach($scope.permissions, function(permission, index) {
-            if(permission.checked) {
+            if((permission.checked) && 
+                ((permission.name !== 'cockpit') || ((user.peerId) && (permission.name === 'cockpit')))) {
                 user.permissions.push(permission.id);
             }
             if (permission.name === 'reports'){

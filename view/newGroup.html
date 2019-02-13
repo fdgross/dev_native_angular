@@ -1,12 +1,12 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/peers">
+            <a href="#!/peers" class="breadcrumb-item active">
                 <i class="fa fa-phone"></i> Ramais
             </a>
         </li>
         <li class="breadcrumb-item">
-            <a href="#!/groups">
+            <a href="#!/groups" class="breadcrumb-item active">
                 Grupos
             </a>
         </li>
@@ -64,7 +64,7 @@
         </div>
         <br>
         <div ng-show="group.id" class="alert alert-primary" role="alert">
-            Grupo criado em '{{group.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{group.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Grupo criado em '{{group.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{group.createdBy}}'<span ng-if="group.createdAt !== group.updatedAt"> e atualizado pela última vez em '{{group.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{group.updatedBy}}'</span>.
         </div>
     </div>
 </div>

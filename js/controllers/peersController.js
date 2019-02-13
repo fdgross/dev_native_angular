@@ -1,8 +1,9 @@
-angular.module("nativeIP").controller("peersController", function ($scope, $rootScope, peer, peers, peersAPI, $location, categories, groups, profiles, costCenters, $filter, $window) {
+angular.module("nativeIP").controller("peersController", function ($scope, peer, peers, users, peersAPI, usersAPI, $location, categories, groups, profiles, costCenters, $filter, $window) {
     $scope.categories = categories.data;
     $scope.groups = groups.data;
     $scope.profiles = profiles.data;
     $scope.costCenters = costCenters.data;
+    $scope.users = users.data;
 
     /**
      * EDIT PEER
@@ -10,6 +11,8 @@ angular.module("nativeIP").controller("peersController", function ($scope, $root
     if(peer){
         $scope.peer = peer.data;
     
+        $scope.peer.user = $filter('filter')($scope.users, {peerId: $scope.peer.id}, true)[0];
+
         if($scope.peer.Groups){
             angular.forEach($scope.peer.Groups, function(group){
                 var objGroup = $filter('filter')($scope.groups, {id: group.id}, true)[0];
@@ -28,7 +31,18 @@ angular.module("nativeIP").controller("peersController", function ($scope, $root
         $scope.editPeer = function (peer) {
             peer = setGroupsCategoryCostCenter(peer);
     
+            var user = peer.user;
+            console.log(user);
+            delete peer.user;
+
             peersAPI.updatePeer(peer.id, peer).then(function (response){
+                if(peer.username !== user.username){
+                    user.name = peer.name;
+                    user.username = peer.username;
+                    user.secret = peer.username;
+                    console.log(user);
+                    usersAPI.updateUser(user.id, user);
+                }    
                 delete $scope.peer;
                 $scope.peerForm.$setPristine();
             }, function (error){
@@ -44,10 +58,18 @@ angular.module("nativeIP").controller("peersController", function ($scope, $root
      */
     if(peers){
         $scope.peers = peers.data;
-    
+        if($scope.peers){
+            angular.forEach($scope.peers, function(peer){
+                peer.user = $filter('filter')($scope.users, {peerId: peer.id}, true)[0];
+            });
+        }
+        
         $scope.deletePeers = function (peers){
             peers.filter(function (peer){
                 if (peer.selected){
+                    if(peer.user){
+                        usersAPI.deleteUsers(peer.user.id);
+                    }
                     peersAPI.deletePeers(peer.id).then(function (){
                         loadPeers();
                     });
@@ -81,10 +103,18 @@ angular.module("nativeIP").controller("peersController", function ($scope, $root
      */
     $scope.addPeer = function (peer) {
         peer = setGroupsCategoryCostCenter(peer);
-        
+
         peersAPI.savePeers(peer).then(function (response){
             delete $scope.peer;
             $scope.peerForm.$setPristine();
+            var user = {
+                name: peer.name, 
+                password: peer.username, 
+                username: peer.username, 
+                peerId: response.data.id,
+                permissions: [15]
+            };
+            usersAPI.saveUsers(user);
             $location.path("/peers");
         }, function (error){
             $scope.returnStatus = error.status;

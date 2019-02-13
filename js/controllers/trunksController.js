@@ -35,30 +35,32 @@ angular.module("nativeIP").controller("trunksController", function ($scope, trun
 
     if(trunk){
         $scope.trunk = trunk.data;
-        $scope.trunk.channels = $scope.trunk.channels.split(",");
-        angular.forEach($scope.khompBoards, function(board){
-            if(board.links){
-                angular.forEach(board.links, function(link){
-                    if($scope.trunk.channels.indexOf(link.id) >= 0){
-                        link.checked = true
-                    }
-                });
-            }
-            if(board.fxo){
-                angular.forEach(board.fxo, function(fxoChannel){
-                    if($scope.trunk.channels.indexOf(fxoChannel.id) >= 0){
-                        fxoChannel.checked = true
-                    }
-                });
-            }
-            if(board.gsm){
-                angular.forEach(board.gsm, function(gsmChannel){
-                    if($scope.trunk.channels.indexOf(gsmChannel.id) >= 0){
-                        gsmChannel.checked = true
-                    }
-                });
-            }
-        });
+        if($scope.trunk.type === 'KHOMP'){
+            $scope.trunk.channels = $scope.trunk.channels.split(",");
+            angular.forEach($scope.khompBoards, function(board){
+                if(board.links){
+                    angular.forEach(board.links, function(link){
+                        if($scope.trunk.channels.indexOf(link.id) >= 0){
+                            link.checked = true
+                        }
+                    });
+                }
+                if(board.fxo){
+                    angular.forEach(board.fxo, function(fxoChannel){
+                        if($scope.trunk.channels.indexOf(fxoChannel.id) >= 0){
+                            fxoChannel.checked = true
+                        }
+                    });
+                }
+                if(board.gsm){
+                    angular.forEach(board.gsm, function(gsmChannel){
+                        if($scope.trunk.channels.indexOf(gsmChannel.id) >= 0){
+                            gsmChannel.checked = true
+                        }
+                    });
+                }
+            });
+        }
     }
 
     if(trunks){
@@ -98,8 +100,9 @@ angular.module("nativeIP").controller("trunksController", function ($scope, trun
     }
 
     $scope.addTrunk = function (trunk) {
-
-        trunk.channels = trunk.channels.toString();
+        if(trunk.type === 'KHOMP'){
+            trunk.channels = trunk.channels.toString();
+        }
 
         trunksAPI.saveTrunks(trunk).then(function (response){
             delete $scope.trunk;
@@ -112,8 +115,9 @@ angular.module("nativeIP").controller("trunksController", function ($scope, trun
     };
 
     $scope.editTrunk = function (trunk) {
-
-        trunk.channels = trunk.channels.toString();
+        if(trunk.type === 'KHOMP'){
+            trunk.channels = trunk.channels.toString();
+        }
 
         trunksAPI.updateTrunk(trunk.id, trunk).then(function (response){
             delete $scope.trunk;

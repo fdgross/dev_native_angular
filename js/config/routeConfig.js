@@ -39,6 +39,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             costCenters: function () {
                 return "";
+            },
+            users: function (usersAPI) {
+                return usersAPI.getUsers();
             }
         }
     });
@@ -64,6 +67,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             costCenters: function (costCentersAPI) {
                 return costCentersAPI.getCostCenters();
+            },
+            users: function (usersAPI) {
+                return usersAPI.getUsers();
             }
         }
     });
@@ -89,6 +95,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             costCenters: function (costCentersAPI) {
                 return costCentersAPI.getCostCenters();
+            },
+            users: function (usersAPI) {
+                return usersAPI.getUsers();
             }
         }
     });
@@ -312,6 +321,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             costCenters: function () {
                 return "";
+            },
+            peers: function () {
+                return "";
             }
         }
     });
@@ -320,8 +332,8 @@ angular.module("nativeIP").config(function ($routeProvider){
         templateUrl: "view/newUser.html",
         controller: "usersController",
         resolve: {
-            users: function () {
-                return "";
+            users: function (usersAPI) {
+                return usersAPI.getUsers();
             },
             user: function (usersAPI, $route) {
                 return usersAPI.getUser($route.current.params.id);
@@ -331,6 +343,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             costCenters: function (costCentersAPI) {
                 return costCentersAPI.getCostCenters();
+            },
+            peers: function (peersAPI) {
+                return peersAPI.getPeers();
             }
         }
     });
@@ -339,8 +354,8 @@ angular.module("nativeIP").config(function ($routeProvider){
         templateUrl: "view/newUser.html",
         controller: "usersController",
         resolve: {
-            users: function () {
-                return "";
+            users: function (usersAPI) {
+                return usersAPI.getUsers();
             },
             user: function () {
                 return "";
@@ -350,6 +365,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             costCenters: function (costCentersAPI) {
                 return costCentersAPI.getCostCenters();
+            },
+            peers: function (peersAPI) {
+                return peersAPI.getPeers();
             }
         }
     });
@@ -555,6 +573,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             peers: function () {
                 return "";
             },
+            apisCalls: function () {
+                return "";
+            },
         }
     });
 
@@ -574,6 +595,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             peers: function (peersAPI) {
                 return peersAPI.getPeers();
             },
+            apisCalls: function (apisCallsAPI) {
+                return apisCallsAPI.getApisCalls();
+            },
         }
     });
 
@@ -592,6 +616,9 @@ angular.module("nativeIP").config(function ($routeProvider){
             },
             peers: function (peersAPI) {
                 return peersAPI.getPeers();
+            },
+            apisCalls: function (apisCallsAPI) {
+                return apisCallsAPI.getApisCalls();
             },
         }
     });
@@ -1302,6 +1329,51 @@ angular.module("nativeIP").config(function ($routeProvider){
      * END ROUTER FOR APIS
      */
 
+     /**
+     * ROUTER FOR CALLRATINGS
+     */
+    $routeProvider.when("/callRatings", {
+        templateUrl: "view/callRatings.html",
+        controller: "callRatingsController",
+        resolve: {
+            ivrs: function (ivrsAPI) {
+                return ivrsAPI.getIvrs();
+            },
+            ivr: function () {
+                return "";
+            },
+        }
+    });
+
+    $routeProvider.when("/newCallRating/:id", {
+        templateUrl: "view/newCallRating.html",
+        controller: "callRatingsController",
+        resolve: {
+            ivrs: function (ivrsAPI) {
+                return ivrsAPI.getIvrs();
+            },
+            ivr: function (ivrsAPI, $route) {
+                return ivrsAPI.getIvr($route.current.params.id);
+            },
+        }
+    });
+
+    $routeProvider.when("/newCallRating", {
+        templateUrl: "view/newCallRating.html",
+        controller: "callRatingsController",
+        resolve: {
+            ivrs: function (ivrsAPI) {
+                return ivrsAPI.getIvrs();
+            },
+            ivr: function () {
+                return "";
+            },
+        }
+    });
+    /**
+     * END ROUTER FOR CALLRATINGS
+     */
+
     /**
      * ROUTER FOR ERROR
      */
@@ -1336,7 +1408,23 @@ angular.module("nativeIP").config(function ($routeProvider){
         }
     });
     /**
-     * END ROUTER FOR ERROR
+     * END ROUTER FOR SERVERINFO
+     */
+
+    /**
+     * ROUTER FOR COCKPIT
+     */
+    $routeProvider.when("/cockpit", {
+        templateUrl: "view/cockpit.html",
+        controller: "cockpitController",
+        resolve: {
+            peers: function (peersAPI) {
+                return peersAPI.getPeers();
+            }
+        }
+    });
+    /**
+     * END ROUTER FOR COCKPIT
      */
 
     /**

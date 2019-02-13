@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/peers">
+            <a href="#!/peers" class="breadcrumb-item active">
                 <i class="fa fa-phone"></i> Ramais
             </a>
         </li>
@@ -171,7 +171,7 @@
         </div>
         <br>
         <div ng-show="peer.id" class="alert alert-primary" role="alert">
-            Ramal criado em '{{peer.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{peer.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Ramal criado em '{{peer.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{peer.createdBy}}'<span ng-if="peer.createdAt !== peer.updatedAt"> e atualizado pela última vez em '{{peer.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{peer.updatedBy}}'</span>.
         </div>
     </div>
 </div>

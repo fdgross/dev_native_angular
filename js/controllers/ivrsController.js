@@ -1,9 +1,9 @@
-angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, ivrs, ivrsAPI, uploadsAPI, queues, peers, apisCalls, $location, $timeout, config) {
+angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, ivrs, ivrsAPI, uploadsAPI, queues, peers, apisCalls, $location, $timeout, config, $filter) {
 
     $scope.baseUrl = config.baseUrl;
     $scope.queues = queues.data;
     $scope.peers = peers.data;
-    $scope.apisCalls = apisCalls.data;
+    $scope.apisCalls = $filter('filter')(apisCalls.data, {event: 'custom'}, true);
     
     $scope.modelCommands = {
         selected: null,
@@ -33,94 +33,106 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
 
     if(ivr){
         $scope.ivr = ivr.data;
-        angular.forEach($scope.ivr.IvrDetails, function(detail){
-            var objDetail = {type: detail.command, label: detail.line};
-            var objParameters = JSON.parse(detail.parameters);
-            switch(detail.command){
-                case "apiCall":
-                    objDetail.name = "API";
-                    objDetail.apiCall = objParameters;
-                    break;
-                case "queue":
-                    objDetail.name = "Chamar fila";
-                    objDetail.queue = objParameters;
-                    break;
-                case "condition":
-                    objDetail.name = "Condição";
-                    objDetail.conditionGroups = objParameters.conditionGroups;
-                    objDetail.thenCommand = [objParameters.thenCommand];
-                    break;
-                case "timeCondition":
-                    objDetail.name = "Condição com horário";
-                    objDetail.dows = {
-                        mon: {name: "Seg", checked: objParameters.dows.some(elem => elem === 'mon')}, 
-                        tue: {name: "Ter", checked: objParameters.dows.some(elem => elem === 'tue')}, 
-                        wed: {name: "Qua", checked: objParameters.dows.some(elem => elem === 'wed')}, 
-                        thu: {name: "Qui", checked: objParameters.dows.some(elem => elem === 'thu')}, 
-                        fri: {name: "Sex", checked: objParameters.dows.some(elem => elem === 'fri')}, 
-                        sat: {name: "Sab", checked: objParameters.dows.some(elem => elem === 'sat')}, 
-                        sun: {name: "Dom", checked: objParameters.dows.some(elem => elem === 'sun')}
-                    };
-                    objDetail.startDay = objParameters.startDay;
-                    objDetail.endDay = objParameters.endDay;
-                    objDetail.startMonth = objParameters.startMonth;
-                    objDetail.endMonth = objParameters.endMonth;
-                    if(objParameters.startTime){
-                        var arrStarttime = objParameters.startTime.split(":");
-                        var startTime = new Date(1970, 0, 1, arrStarttime[0], arrStarttime[1], 0);
-                        var timezone = startTime.getTimezoneOffset()/60;
-                        var startTimeNew = new Date(1970, 0, 1, arrStarttime[0]-timezone, arrStarttime[1], 0);
-                        objDetail.startTime = startTimeNew;
-                    }
-                    if(objParameters.endTime){
-                        var arrEndtime = objParameters.endTime.split(":");
-                        var endTime = new Date(1970, 0, 1, arrEndtime[0], arrEndtime[1], 0);
-                        var timezone = endTime.getTimezoneOffset()/60;
-                        var endTimeNew = new Date(1970, 0, 1, arrEndtime[0]-timezone, arrEndtime[1], 0);
-                        objDetail.endTime = endTimeNew;
-                    }
-                    objDetail.thenCommand = [objParameters.thenCommand];
-                    break;
-                case "answer":
-                    objDetail.name = "Atender";
-                    break;
-                case "hangup":
-                    objDetail.name = "Desligar";
-                    break;
-                case "goto":
-                    objDetail.name = "Desvio";
-                    objDetail.gotoType = objParameters.gotoType;
-                    objDetail.gotoDest = objParameters.gotoDest;
-                    break;
-                case "dial":
-                    objDetail.name = "Discar";
-                    objDetail.dialType = objParameters.dialType;
-                    objDetail.dialDest = objParameters.dialDest;
-                    break;
-                case "set":
-                    objDetail.name = "Setar variável";
-                    objDetail.setVar = objParameters.setVar;
-                    objDetail.setVarValue = objParameters.setVarValue;
-                    break;
-                case "playback":
-                    objDetail.name = "Tocar áudio";
-                    objDetail.file = {name: objParameters.file, new: false};
-                    break;
-                case "read":
-                    objDetail.name = "Tocar áudio e capturar dígitos";
-                    objDetail.readTimeout = objParameters.readTimeout;
-                    objDetail.readDigits = objParameters.readDigits;
-                    objDetail.readVariable = objParameters.readVariable;
-                    objDetail.file = {name: objParameters.file, new: false};
-                    break;
-                case "custom":
-                    objDetail.name = "Personalizado";
-                    objDetail.customCommand = objParameters.customCommand;
-                    objDetail.customParameters = objParameters.customParameters;
-                    break;
+        if($scope.ivr.mode === 'basic'){
+            $scope.ivr.details = JSON.parse($scope.ivr.basicDefinition);
+            if($scope.ivr.details.fileMain){
+                $scope.ivr.details.fileMain.file.new = false;
             }
-            $scope.modelCommands.lists.definition.push(objDetail);
-        });
+            if($scope.ivr.details.fileError){
+                $scope.ivr.details.fileError.file.new = false;
+            }
+            delete $scope.ivr.basicDefinition;
+        }
+        else {
+            angular.forEach($scope.ivr.IvrDetails, function(detail){
+                var objDetail = {type: detail.command, label: detail.line};
+                var objParameters = JSON.parse(detail.parameters);
+                switch(detail.command){
+                    case "apiCall":
+                        objDetail.name = "API";
+                        objDetail.apiCall = objParameters;
+                        break;
+                    case "queue":
+                        objDetail.name = "Chamar fila";
+                        objDetail.queue = objParameters;
+                        break;
+                    case "condition":
+                        objDetail.name = "Condição";
+                        objDetail.conditionGroups = objParameters.conditionGroups;
+                        objDetail.thenCommand = [objParameters.thenCommand];
+                        break;
+                    case "timeCondition":
+                        objDetail.name = "Condição com horário";
+                        objDetail.dows = {
+                            mon: {name: "Seg", checked: objParameters.dows.some(elem => elem === 'mon')}, 
+                            tue: {name: "Ter", checked: objParameters.dows.some(elem => elem === 'tue')}, 
+                            wed: {name: "Qua", checked: objParameters.dows.some(elem => elem === 'wed')}, 
+                            thu: {name: "Qui", checked: objParameters.dows.some(elem => elem === 'thu')}, 
+                            fri: {name: "Sex", checked: objParameters.dows.some(elem => elem === 'fri')}, 
+                            sat: {name: "Sab", checked: objParameters.dows.some(elem => elem === 'sat')}, 
+                            sun: {name: "Dom", checked: objParameters.dows.some(elem => elem === 'sun')}
+                        };
+                        objDetail.startDay = objParameters.startDay;
+                        objDetail.endDay = objParameters.endDay;
+                        objDetail.startMonth = objParameters.startMonth;
+                        objDetail.endMonth = objParameters.endMonth;
+                        if(objParameters.startTime){
+                            var arrStarttime = objParameters.startTime.split(":");
+                            var startTime = new Date(1970, 0, 1, arrStarttime[0], arrStarttime[1], 0);
+                            var timezone = startTime.getTimezoneOffset()/60;
+                            var startTimeNew = new Date(1970, 0, 1, arrStarttime[0]-timezone, arrStarttime[1], 0);
+                            objDetail.startTime = startTimeNew;
+                        }
+                        if(objParameters.endTime){
+                            var arrEndtime = objParameters.endTime.split(":");
+                            var endTime = new Date(1970, 0, 1, arrEndtime[0], arrEndtime[1], 0);
+                            var timezone = endTime.getTimezoneOffset()/60;
+                            var endTimeNew = new Date(1970, 0, 1, arrEndtime[0]-timezone, arrEndtime[1], 0);
+                            objDetail.endTime = endTimeNew;
+                        }
+                        objDetail.thenCommand = [objParameters.thenCommand];
+                        break;
+                    case "answer":
+                        objDetail.name = "Atender";
+                        break;
+                    case "hangup":
+                        objDetail.name = "Desligar";
+                        break;
+                    case "goto":
+                        objDetail.name = "Desvio";
+                        objDetail.gotoType = objParameters.gotoType;
+                        objDetail.gotoDest = objParameters.gotoDest;
+                        break;
+                    case "dial":
+                        objDetail.name = "Discar";
+                        objDetail.dialType = objParameters.dialType;
+                        objDetail.dialDest = objParameters.dialDest;
+                        break;
+                    case "set":
+                        objDetail.name = "Setar variável";
+                        objDetail.setVar = objParameters.setVar;
+                        objDetail.setVarValue = objParameters.setVarValue;
+                        break;
+                    case "playback":
+                        objDetail.name = "Tocar áudio";
+                        objDetail.file = {name: objParameters.file, new: false};
+                        break;
+                    case "read":
+                        objDetail.name = "Tocar áudio e capturar dígitos";
+                        objDetail.readTimeout = objParameters.readTimeout;
+                        objDetail.readDigits = objParameters.readDigits;
+                        objDetail.readVariable = objParameters.readVariable;
+                        objDetail.file = {name: objParameters.file, new: false};
+                        break;
+                    case "custom":
+                        objDetail.name = "Personalizado";
+                        objDetail.customCommand = objParameters.customCommand;
+                        objDetail.customParameters = objParameters.customParameters;
+                        break;
+                }
+                $scope.modelCommands.lists.definition.push(objDetail);
+            });
+        }
     }
     
     
@@ -161,6 +173,24 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
         });
     };
 
+    $scope.createOptions = function (ivr) {
+        if(!ivr.details){
+            ivr.details = {};
+            ivr.details.options = [{value: ""}];
+            ivr.details.fileMain = {};
+            ivr.details.fileError = {};
+        }
+    }
+
+    $scope.addOption = function (option){
+        var newOption = {value: ""}
+        $scope.ivr.details.options.splice(($scope.ivr.details.options.indexOf(option)+1),0, newOption);
+    }
+
+    $scope.removeOption = function (option) {
+        $scope.ivr.details.options.splice( $scope.ivr.details.options.indexOf(option), 1 );
+    }
+
     $scope.checkIvrSelected = function () {
         $scope.hasIvrSelected = $scope.ivrs.some(function (ivr) {
             return ivr.selected;
@@ -173,8 +203,14 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
     };
 
     $scope.addIvr = function (ivr) {
-        
-        ivr = setDetails(ivr);
+
+        if(ivr.mode === "basic"){
+            ivr.basicDefinition = angular.toJson(ivr.details);
+            delete ivr.details;
+        }
+        else{
+            ivr = setDetailsAdvanced(ivr);
+        }
 
         ivrsAPI.saveIvrs(ivr).then(function (response){
             delete $scope.ivr;
@@ -188,9 +224,15 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
 
     $scope.editIvr = function (ivr) {
         
-        delete ivr.IvrDetails;
-        ivr = setDetails(ivr);
-
+        if(ivr.mode === "basic"){
+            ivr.basicDefinition = angular.toJson(ivr.details);
+            delete ivr.details;
+        }
+        else{
+            delete ivr.IvrDetails;
+            ivr = setDetailsAdvanced(ivr);
+        }
+        
         ivrsAPI.updateIvr(ivr.id, ivr).then(function (response){
             delete $scope.ivr;
             $scope.ivrForm.$setPristine();
@@ -201,7 +243,7 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
         });
     };
 
-    var setDetails = function(ivr){
+    var setDetailsAdvanced = function(ivr){
         ivr.type = "ivr";
         ivr.ivrDetails = new Array;
         angular.forEach($scope.modelCommands.lists.definition, function(detail){

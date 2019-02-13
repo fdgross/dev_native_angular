@@ -35,9 +35,15 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#!/apis">
+                    <a href="#!/apis" ng-if="loggedUserPermissions.indexOf('apis') !== -1">
                         <i class="fa fa-link"></i>
                         <span>APIs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#!/features" ng-if="loggedUserPermissions.indexOf('features') !== -1">
+                        <i class="fa fa-briefcase"></i>
+                        <span>Cód. Funcionalidades</span>
                     </a>
                 </li>
                 <li>
@@ -53,8 +59,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#!/features" ng-if="loggedUserPermissions.indexOf('features') !== -1">
-                        <i class="fa fa-briefcase"></i>
+                    <a href="#!/cockpit" ng-if="loggedUserPermissions.indexOf('cockpit') !== -1">
+                        <i class="fa fa-wrench" ></i>
                         <span>Funcionalidades</span>
                     </a>
                 </li>
@@ -127,11 +133,21 @@
                         </ul>
                     </div>
                 </li>
-                <li>
-                    <a href="#!/customRules" ng-if="loggedUserPermissions.indexOf('customRules') !== -1">
+                <li class="sidebar-dropdown">
+                    <a ng-if="loggedUserPermissions.indexOf('customRules') !== -1">
                         <i class="fa fa-code-branch"></i>
                         <span>Regras Customizadas</span>
                     </a>
+                    <div class="sidebar-submenu">
+                        <ul>
+                            <li>
+                                <a href="#!/callRatings">Avaliações de Atendimento</a>
+                            </li>
+                            <li>
+                                <a href="#!/customRules">Regras Customizadas</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li>
                     <a href="#" ng-if="loggedUserPermissions.indexOf('reports') !== -1">

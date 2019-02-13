@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="#!/users">
+            <a href="#!/users" class="breadcrumb-item active">
                 <i class="fa fa-user"></i> Usuários
             </a>
         </li>
@@ -14,21 +14,42 @@
         <form name="userForm">
             <div class="form-group row">
                 <label for="name" class="col-sm-2 col-form-label">Nome:</label>
-                <div class="col-sm-6">
-                    <input class="form-control" type="text" ng-model="user.name" ng-required="true" name="name" placeholder="Nome" ng-minlength="3"
+                <div class="col-sm-4">
+                    <input class="form-control" type="text" ng-model="user.name" ng-required="true" 
+                        name="name" placeholder="Nome" ng-minlength="3" 
                         ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
+                </div>
+                <div class="col-sm-3" ng-if="loggedUserAdmin">
+                    <label class="control control-checkbox">
+                        Administrador
+                        <input type="checkbox" id="{{user.administrator}}" ng-model="user.administrator">
+                        <div class="control_indicator"></div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row" ng-hide=true>
+                <label for="email" class="col-sm-2 col-form-label">E-Mail:</label>
+                <div class="col-sm-4">
+                    <input class="form-control" type="text" ng-model="user.email" name="email" placeholder="E-Mail" />
                 </div>
             </div>
             <div class="form-group row">
-                <label for="email" class="col-sm-2 col-form-label">E-Mail:</label>
-                <div class="col-sm-6">
-                    <input class="form-control" type="text" ng-model="user.email" name="email" placeholder="E-Mail" />
+                <label for="email" class="col-sm-2 col-form-label">Ramal:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" ng-model="user.peerId" name="peer" ng-if="peers.length > 0">
+                        <option value="">Selecione um Ramal</option>
+                        <option ng-repeat="peer in peers" ng-value="peer.id">{{peer.username}} - {{peer.name}}</option>
+                    </select>
+                    <div class="alert alert-warning fade show" role="alert" ng-if="peers.length === 0">
+                        Não existem ramais disponíveis.
+                    </div>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="username" class="col-sm-2 col-form-label">Login:</label>
                 <div class="col-sm-4">
-                    <input class="form-control" type="text" ng-model="user.username" ng-required="true" name="username" placeholder="Login" ng-minlength="3"
+                    <input class="form-control" type="text" ng-model="user.username" ng-disabled="user.id" 
+                        ng-required="true" name="username" placeholder="Login" ng-minlength="3"
                         ng-model-options="{updateOn: 'default blur', debounce:{default: 1000, blur: 0}}" />
                 </div>
                 <label for="password" class="col-sm-2 col-form-label">Senha:</label>
@@ -66,7 +87,12 @@
                                 <div ng-if="$index>=3*$parent.$index && $index <= 3*($parent.$index+1)-1">
                                     <label class="control control-checkbox" ng-if="permission != null">
                                         {{permission.displayName}}
-                                        <input type="checkbox" id="{{permission.id}}" ng-model="permission.checked" ng-checked="permission.checked" ng-change="checkReportsSelected(permission)">
+                                        <input type="checkbox" 
+                                        id="{{permission.id}}" 
+                                        ng-model="permission.checked" 
+                                        ng-checked="permission.checked" 
+                                        ng-change="checkReportsSelected(permission)"
+                                        ng-disabled="!user.peerId && (permission.name === 'cockpit')">
                                         <div class="control_indicator"></div>
                                     </label>
                                 </div>
@@ -155,7 +181,7 @@
         </div>
         <br>
         <div ng-show="user.id" class="alert alert-primary" role="alert">
-            Usuário criado em '{{user.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' e atualizado pela última vez em '{{user.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}'
+            Usuário criado em '{{user.createdAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{user.createdBy}}'<span ng-if="user.createdAt !== user.updatedAt"> e atualizado pela última vez em '{{user.updatedAt | date:'dd/MM/yyyy HH:mm:ss'}}' por '{{user.updatedBy}}'</span>.
         </div>
     </div>
 </div>
