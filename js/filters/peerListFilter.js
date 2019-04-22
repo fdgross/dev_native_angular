@@ -24,5 +24,5 @@ angular.module("nativeIP").filter('peerListFilter', function () {
                 return termInUsername || termInName || termInProfile || termInCategory;
             });
         }
-    }
+    };
 });

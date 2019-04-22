@@ -20,5 +20,5 @@ angular.module("nativeIP").factory("loadingInterceptor", function($q, $rootScope
             $rootScope.loading = false;
             return $q.reject(rejection);
         }
-    }
+    };
 });

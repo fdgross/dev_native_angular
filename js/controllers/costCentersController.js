@@ -2,7 +2,7 @@ angular.module("nativeIP").controller("costCentersController", function ($scope,
 
     if(costCenter){
         $scope.costCenter = costCenter.data;
-        $scope.peers = new Array;
+        $scope.peers = [];
         angular.forEach(peers.data, function(peer){
             if(peer.costCenterId === $scope.costCenter.id){
                 $scope.peers.push({"id": peer.id, "username": peer.username, "name": peer.name});
@@ -21,7 +21,7 @@ angular.module("nativeIP").controller("costCentersController", function ($scope,
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 

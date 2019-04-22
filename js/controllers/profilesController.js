@@ -26,7 +26,7 @@ angular.module("nativeIP").controller("profilesController", function ($scope, pr
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -76,7 +76,7 @@ angular.module("nativeIP").controller("profilesController", function ($scope, pr
     };
 
     var setOutRoutes = function (profile) {
-        profile.outRoutes = new Array;
+        profile.outRoutes = [];
         angular.forEach($scope.outRoutes, function(outRoute, index) {
             if(outRoute.checked) {
                 profile.outRoutes.push(outRoute.id);
@@ -84,5 +84,5 @@ angular.module("nativeIP").controller("profilesController", function ($scope, pr
         });
 
         return profile;
-    }
+    };
 });

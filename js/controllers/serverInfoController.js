@@ -4,16 +4,15 @@ angular.module("nativeIP").controller("serverInfoController", function ($scope, 
     $scope.memChart = {};
     $scope.diskChart = {};
 
-    var peers = peers.data;
-    var peersRegistered = $filter('filter')(peers, function(peer){
+    var arrayPeers = peers.data;
+    var peersRegistered = $filter('filter')(arrayPeers, function(peer){
       return (peer.sipRegStatus === 'Registered' || peer.iaxRegStatus === 'Registered');
     });
 
     $scope.countPeersRegistered = peersRegistered.length;
-    $scope.countPeers = peers.length;
-    ;
+    $scope.countPeers = arrayPeers.length;
 
-    $scope.peersLastModification = Math.max.apply(null,peers.map(function(o) { return new Date(o.updatedAt) }));
+    $scope.peersLastModification = Math.max.apply(null,arrayPeers.map(function(o) { return new Date(o.updatedAt); }));
 
     $scope.$on('$viewContentLoaded', function() {
       updateServerInfo(serverInfoAPI);
@@ -27,7 +26,7 @@ angular.module("nativeIP").controller("serverInfoController", function ($scope, 
       serverInfoAPI.getServerInfo().then((serverInfoTmp) => {
         $scope.setServerInfo(serverInfoTmp);
       });
-    }
+    };
 
     $scope.setServerInfo = function (serverInfoTmp) {
       var serverInfo = serverInfoTmp.data;
@@ -35,7 +34,7 @@ angular.module("nativeIP").controller("serverInfoController", function ($scope, 
       var memUsed = Math.round((serverInfo.mem.used/serverInfo.mem.total)*100);
       var diskTotalSize = 0;
       var diskTotalUse = 0;
-      var disks = new Array;
+      var disks = [];
 
       serverInfo.disk.forEach(disk => {
         if(disk.use){

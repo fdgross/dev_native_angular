@@ -4,7 +4,7 @@ angular.module("nativeIP").filter("apiEventName", function(){
         events.filter(function (event){
             if (input === event.event){
                 output = event.name;
-            };
+            }
         });
         
         return output;

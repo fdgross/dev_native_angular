@@ -41,21 +41,21 @@ angular.module("nativeIP").controller("trunksController", function ($scope, trun
                 if(board.links){
                     angular.forEach(board.links, function(link){
                         if($scope.trunk.channels.indexOf(link.id) >= 0){
-                            link.checked = true
+                            link.checked = true;
                         }
                     });
                 }
                 if(board.fxo){
                     angular.forEach(board.fxo, function(fxoChannel){
                         if($scope.trunk.channels.indexOf(fxoChannel.id) >= 0){
-                            fxoChannel.checked = true
+                            fxoChannel.checked = true;
                         }
                     });
                 }
                 if(board.gsm){
                     angular.forEach(board.gsm, function(gsmChannel){
                         if($scope.trunk.channels.indexOf(gsmChannel.id) >= 0){
-                            gsmChannel.checked = true
+                            gsmChannel.checked = true;
                         }
                     });
                 }
@@ -74,7 +74,7 @@ angular.module("nativeIP").controller("trunksController", function ($scope, trun
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -131,7 +131,7 @@ angular.module("nativeIP").controller("trunksController", function ($scope, trun
 
     $scope.addRemoveChannel = function(channel, check){
         if(!$scope.trunk.channels){
-            $scope.trunk.channels = new Array;
+            $scope.trunk.channels = [];
         }
         if(check){
             $scope.trunk.channels.push(channel);
@@ -139,5 +139,5 @@ angular.module("nativeIP").controller("trunksController", function ($scope, trun
         else{
             $scope.trunk.channels.splice($scope.trunk.channels.indexOf(channel),1);
         }
-    }
+    };
 });

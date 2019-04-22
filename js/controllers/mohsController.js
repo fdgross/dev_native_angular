@@ -6,7 +6,7 @@ angular.module("nativeIP").controller("mohsController", function ($scope, moh, m
         $scope.moh = moh.data;
         if($scope.moh.files.length){
             var arrFiles = $scope.moh.files.split(",");
-            $scope.moh.files = new Array;
+            $scope.moh.files = [];
             angular.forEach(arrFiles, function (file) {
                 $scope.moh.files.push({'name': file, 'new': false});
             });
@@ -24,7 +24,7 @@ angular.module("nativeIP").controller("mohsController", function ($scope, moh, m
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -52,7 +52,7 @@ angular.module("nativeIP").controller("mohsController", function ($scope, moh, m
     $scope.addMoh = function (moh) {
         if(moh.files){
             var arrFiles = moh.files;
-            moh.files = new Array;
+            moh.files = [];
             angular.forEach(arrFiles, function (file) {
                 moh.files.push(file.name);
             });
@@ -71,7 +71,7 @@ angular.module("nativeIP").controller("mohsController", function ($scope, moh, m
     $scope.editMoh = function (moh) {
         if(moh.files){
             var arrFiles = moh.files;
-            moh.files = new Array;
+            moh.files = [];
             angular.forEach(arrFiles, function (file) {
                 moh.files.push(file.name);
             });
@@ -100,7 +100,7 @@ angular.module("nativeIP").controller("mohsController", function ($scope, moh, m
 
         promise.then(function (response) {
             if(!moh.files){
-                moh.files = new Array;
+                moh.files = [];
             }
             moh.files.push({'name': currentFile.name, 'new': true});
             $scope.serverResponse = response;
@@ -113,13 +113,14 @@ angular.module("nativeIP").controller("mohsController", function ($scope, moh, m
 
     $scope.removeFile = function (file, moh, index) {
         var fileName = file.name;
+        var newFile = '';
         if(file.new){
-            var file = 'uploads_tmp/'+fileName;
+            newFile = 'uploads_tmp/'+fileName;
         }
         else{
-            var file = 'mohs/'+moh.id+'/'+fileName;
+            newFile = 'mohs/'+moh.id+'/'+fileName;
         }
-        uploadsAPI.deleteUploads(file)
+        uploadsAPI.deleteUploads(newFile)
             .then(function (response) {
                 moh.files.splice(index, 1);
                 $scope.serverResponse = response;

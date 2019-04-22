@@ -19,8 +19,8 @@ angular.module("nativeIP").controller("featuresController", function ($scope, fe
             }
             else{
                 var newFeature = {};
-                newFeature['feature'] = key;
-                newFeature['value'] = value;
+                newFeature.feature = key;
+                newFeature.value = value;
                 addFeature(newFeature);
             }
         });

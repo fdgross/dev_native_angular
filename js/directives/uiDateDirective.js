@@ -11,7 +11,7 @@ angular.module("nativeIP").directive("uiDate", function ($filter) {
                     date = date.substring(0,5) + "/" + date.substring(5,9);
                 }
                 return date;
-            }
+            };
 
             element.bind("keyup", function(){
                 ctrl.$setViewValue(_formatDate(ctrl.$viewValue));

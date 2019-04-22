@@ -76,17 +76,18 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
                         objDetail.endDay = objParameters.endDay;
                         objDetail.startMonth = objParameters.startMonth;
                         objDetail.endMonth = objParameters.endMonth;
+                        var timezone;
                         if(objParameters.startTime){
                             var arrStarttime = objParameters.startTime.split(":");
                             var startTime = new Date(1970, 0, 1, arrStarttime[0], arrStarttime[1], 0);
-                            var timezone = startTime.getTimezoneOffset()/60;
+                            timezone = startTime.getTimezoneOffset()/60;
                             var startTimeNew = new Date(1970, 0, 1, arrStarttime[0]-timezone, arrStarttime[1], 0);
                             objDetail.startTime = startTimeNew;
                         }
                         if(objParameters.endTime){
                             var arrEndtime = objParameters.endTime.split(":");
                             var endTime = new Date(1970, 0, 1, arrEndtime[0], arrEndtime[1], 0);
-                            var timezone = endTime.getTimezoneOffset()/60;
+                            timezone = endTime.getTimezoneOffset()/60;
                             var endTimeNew = new Date(1970, 0, 1, arrEndtime[0]-timezone, arrEndtime[1], 0);
                             objDetail.endTime = endTimeNew;
                         }
@@ -136,8 +137,8 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
     }
     
     
-    $scope.customRules = new Array;
-    $scope.ivrs = new Array;
+    $scope.customRules = [];
+    $scope.ivrs = [];
     angular.forEach(ivrs.data, function(ivr){
         if(ivr.type === 'customRule'){
             $scope.customRules.push(ivr);
@@ -155,13 +156,13 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
                 }, function (error) {
                     $scope.returnStatus = error.status;
                 });
-            };
+            }
         });
     };
 
     var loadIvrs = function () {
         ivrsAPI.getIvrs().then(function (response) {
-            $scope.ivrs = new Array;
+            $scope.ivrs = [];
             angular.forEach(response.data, function(ivr){
                 if(ivr.type === 'ivr'){
                     $scope.ivrs.push(ivr);
@@ -180,16 +181,16 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
             ivr.details.fileMain = {};
             ivr.details.fileError = {};
         }
-    }
+    };
 
     $scope.addOption = function (option){
-        var newOption = {value: ""}
+        var newOption = {value: ""};
         $scope.ivr.details.options.splice(($scope.ivr.details.options.indexOf(option)+1),0, newOption);
-    }
+    };
 
     $scope.removeOption = function (option) {
         $scope.ivr.details.options.splice( $scope.ivr.details.options.indexOf(option), 1 );
-    }
+    };
 
     $scope.checkIvrSelected = function () {
         $scope.hasIvrSelected = $scope.ivrs.some(function (ivr) {
@@ -245,7 +246,7 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
 
     var setDetailsAdvanced = function(ivr){
         ivr.type = "ivr";
-        ivr.ivrDetails = new Array;
+        ivr.ivrDetails = [];
         angular.forEach($scope.modelCommands.lists.definition, function(detail){
             var newdetail = {command: detail.type, line: detail.label, parameters: ""};
 
@@ -267,7 +268,7 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
                 case "playback":
                     parameters = {
                         file: detail.file.name,
-                    }
+                    };
                     break;
                 case "read":
                     parameters = {
@@ -275,10 +276,10 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
                         readDigits:detail.readDigits,
                         readVariable: detail.readVariable,
                         file: detail.file.name,
-                    }
+                    };
                     break;
                 case "timeCondition":
-                    var parameterDows = new Array;
+                    var parameterDows = [];
                     angular.forEach(detail.dows, function(dow, dowKey){
                         if(dow.checked){
                             parameterDows.push(dowKey);
@@ -306,27 +307,27 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
             ivr.ivrDetails.push(newdetail);
         });
         return ivr;
-    }
+    };
 
     $scope.addCondition = function (group, condition) {
         group.splice((group.indexOf(condition)+1), 0, {"conditionVariable":"","conditionOperator":"","conditionValue":"","logicalOperator":""} );
-    }
+    };
 
     $scope.removeCondition = function (group, condition) {
         group.splice( group.indexOf(condition), 1 );
-    }
+    };
 
     $scope.addGroup = function (groups, group) {
         groups.splice( (groups.indexOf(group)+1), 0, {conditionGroup: [{conditionVariable: "", conditionOperator: "", conditionValue: "", logicalOperator: ""}], logicalOperator: ""} );
-    }
+    };
 
     $scope.removeGroup = function (groups, group) {
         groups.splice( groups.indexOf(group), 1 );
-    }
+    };
 
     $scope.removeCommand = function(array, item){
         array.splice(item,1);
-    }
+    };
 
     $scope.uploadFile = function (currentFile, item) {
         var file = currentFile;
@@ -343,7 +344,7 @@ angular.module("nativeIP").controller("ivrsController", function ($scope, ivr, i
         });
 
         promise.then(function (response) {
-            item.file = {'name': currentFile.name, 'new': true}
+            item.file = {'name': currentFile.name, 'new': true};
         }, function (error) {
             console.log(error);
             $scope.serverResponse = 'An error has occurred';

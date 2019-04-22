@@ -6,8 +6,8 @@ angular.module("nativeIP").controller("eventsController", function ($scope, even
         angular.forEach($scope.queues, function(queue){
             queue.checked = false;
         });
-        $scope.ivrs = new Array;
-        $scope.customRules = new Array;
+        $scope.ivrs = [];
+        $scope.customRules = [];
         angular.forEach(ivrs.data, function(ivr){
             if(ivr.type === 'customRule'){
                 $scope.customRules.push({id: ivr.id, name: ivr.name});
@@ -25,7 +25,7 @@ angular.module("nativeIP").controller("eventsController", function ($scope, even
     };
 
     if(!event){
-        $scope.event = new Object;
+        $scope.event = {};
     }
 
     if(event){
@@ -63,7 +63,7 @@ angular.module("nativeIP").controller("eventsController", function ($scope, even
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -121,8 +121,8 @@ angular.module("nativeIP").controller("eventsController", function ($scope, even
             event.sendTo = "hangup";
         }
 
-        event.ivrs = new Array;
-        event.queues = new Array;
+        event.ivrs = [];
+        event.queues = [];
         angular.forEach($scope.ivrs, function(ivr){
             if(ivr.checked){
                 event.ivrs.push(ivr.id);
@@ -135,11 +135,11 @@ angular.module("nativeIP").controller("eventsController", function ($scope, even
         });
 
         return event;
-    }
+    };
 
     $scope.emptySendToValue = function (){
         $scope.event.sendToValue = "";
-    }
+    };
 
     $scope.dateChanged = function (){
         if(!$scope.dateStart){
@@ -151,5 +151,5 @@ angular.module("nativeIP").controller("eventsController", function ($scope, even
        
         $scope.event.dateStart = new Date($scope.dateStart.valueOf() - $scope.dateStart.getTimezoneOffset() * 60000);
         $scope.event.dateEnd = new Date($scope.dateEnd.valueOf() - $scope.dateEnd.getTimezoneOffset() * 60000);
-    }
+    };
 });

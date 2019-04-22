@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html ng-app="nativeIP">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>.: Native IP :.</title>
+
+    <link rel="stylesheet" type="text/css" href="css/styles.min.css">
+	<script src="js/all.min.js"></script>
+    
+</head>
+
+<body>
+    <div ng-class="logged ? 'page-wrapper chiller-theme bg1 toggled' : 'page-wrapper chiller-theme bg1'">
+        <div ng-include="'view/sidebar.html'" ng-show="logged"></div>
+        <main class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <div class="jumbotron" ng-show="loading" style="display: flex; justify-content: center;">
+                            <img src="assets/img/loading.svg">
+                        </div>
+                        <div ng-hide="loading">
+                            <div ng-view></div>
+                        </div>                          
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- page-content" -->
+    </div>
+    <!-- page-wrapper -->
+</body>
+
+</html>

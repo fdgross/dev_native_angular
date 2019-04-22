@@ -22,10 +22,10 @@ angular.module("nativeIP").controller("callRatingsController", function ($scope,
     }
 
     if(!ivr){
-        $scope.callRating = new Object;
-        $scope.callRating.fileMain = new Object;
-        $scope.callRating.fileError = new Object;
-        $scope.callRating.fileSuccess = new Object;
+        $scope.callRating = {};
+        $scope.callRating.fileMain = {};
+        $scope.callRating.fileError = {};
+        $scope.callRating.fileSuccess = {};
         $scope.callRating.endAction = 'hangup';
     }
     
@@ -39,7 +39,7 @@ angular.module("nativeIP").controller("callRatingsController", function ($scope,
                 }, function (error) {
                     $scope.returnStatus = error.status;
                 });
-            };
+            }
         });
     };
 
@@ -65,7 +65,7 @@ angular.module("nativeIP").controller("callRatingsController", function ($scope,
 
     $scope.addCallRating = function (callRating) {
         
-        var newCallRating = {name: callRating.name, description: callRating.description, type: 'customRule', mode: 'callRating'}
+        var newCallRating = {name: callRating.name, description: callRating.description, type: 'customRule', mode: 'callRating'};
         delete callRating.name;
         delete callRating.description;
         newCallRating.basicDefinition = angular.toJson(callRating);
@@ -82,7 +82,7 @@ angular.module("nativeIP").controller("callRatingsController", function ($scope,
 
     $scope.editCallRating = function (callRating) {
         
-        var newCallRating = {name: callRating.name, description: callRating.description, type: 'customRule', mode: 'callRating'}
+        var newCallRating = {name: callRating.name, description: callRating.description, type: 'customRule', mode: 'callRating'};
         delete callRating.name;
         delete callRating.description;
         newCallRating.basicDefinition = angular.toJson(callRating);
@@ -99,9 +99,9 @@ angular.module("nativeIP").controller("callRatingsController", function ($scope,
 
     var setDetails = function(callRating){
         callRating.type = "customRule";
-        callRating.ivrDetails = new Array;
+        callRating.ivrDetails = [];
         return callRating;
-    }
+    };
 
     $scope.uploadFile = function (currentFile, item) {
         var file = currentFile;
@@ -118,7 +118,7 @@ angular.module("nativeIP").controller("callRatingsController", function ($scope,
         });
 
         promise.then(function (response) {
-            item.file = {'name': currentFile.name, 'new': true}
+            item.file = {'name': currentFile.name, 'new': true};
         }, function (error) {
             console.log(error);
             $scope.serverResponse = 'An error has occurred';

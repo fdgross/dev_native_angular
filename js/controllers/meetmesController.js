@@ -23,7 +23,7 @@ angular.module("nativeIP").controller("meetmesController", function ($scope, mee
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -78,7 +78,7 @@ angular.module("nativeIP").controller("meetmesController", function ($scope, mee
         else{
             return formatHours($scope.meetme.startTime);
         }
-    }
+    };
 
     $scope.getEndTime = function(){
         if(!$scope.meetme.endTime){
@@ -88,7 +88,7 @@ angular.module("nativeIP").controller("meetmesController", function ($scope, mee
         else{
             return formatHours($scope.meetme.endTime);
         }
-    }
+    };
 
     $scope.getRandomPassword = function(){
         if(!$scope.meetme.password){
@@ -97,11 +97,11 @@ angular.module("nativeIP").controller("meetmesController", function ($scope, mee
         else{
             return $scope.meetme.password;
         }
-    }
+    };
 
     $scope.dateChanged = function (){
         $scope.meetme.date = $scope.date.toISOString().substring(0, 10);
-    }
+    };
 
     $scope.startTimeChanged = function (){
         if($scope.endTime <= $scope.startTime){
@@ -113,7 +113,7 @@ angular.module("nativeIP").controller("meetmesController", function ($scope, mee
         else{
             $scope.meetme.startTime = $scope.startTime.toLocaleTimeString();
         }
-    }
+    };
 
     $scope.endTimeChanged = function (){
         if($scope.endTime <= $scope.startTime){
@@ -124,7 +124,7 @@ angular.module("nativeIP").controller("meetmesController", function ($scope, mee
         else{
             $scope.meetme.endTime = $scope.endTime.toLocaleTimeString();
         }
-    }
+    };
 
     var formatHours = function(adjTime){
         var oDate = new Date();
@@ -135,5 +135,5 @@ angular.module("nativeIP").controller("meetmesController", function ($scope, mee
             0
         );
         return oDate;
-    }
+    };
 });

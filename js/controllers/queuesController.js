@@ -3,7 +3,7 @@ angular.module("nativeIP").controller("queuesController", function ($scope, queu
     $scope.users = users.data;
     $scope.peers = peers.data;
     $scope.mohs = mohs.data;
-    $scope.ivrs = new Array;
+    $scope.ivrs = [];
     angular.forEach(ivrs.data, function(ivr){
         if(ivr.type === 'customRule'){
             $scope.ivrs.push(ivr);
@@ -66,7 +66,7 @@ angular.module("nativeIP").controller("queuesController", function ($scope, queu
                 var objRule = $filter('filter')($scope.ivrs, {id: rule.id}, true)[0];
                 $scope.modelIvrs.lists.ivrsSelectedBefore.push(objRule);
                 $scope.modelIvrs.lists.ivrsAvail = $scope.modelIvrs.lists.ivrsAvail.filter(function(el){
-                    return el !== objRule
+                    return el !== objRule;
                 });
             });
         }
@@ -76,7 +76,7 @@ angular.module("nativeIP").controller("queuesController", function ($scope, queu
                 var objRule = $filter('filter')($scope.ivrs, {id: rule.id}, true)[0];
                 $scope.modelIvrs.lists.ivrsSelectedAfter.push(objRule);
                 $scope.modelIvrs.lists.ivrsAvail = $scope.modelIvrs.lists.ivrsAvail.filter(function(el){
-                    return el !== objRule
+                    return el !== objRule;
                 });
             });
         }
@@ -93,7 +93,7 @@ angular.module("nativeIP").controller("queuesController", function ($scope, queu
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -158,30 +158,30 @@ angular.module("nativeIP").controller("queuesController", function ($scope, queu
         delete queue.chkQueueMaxSize;
 
         if(queue.callcenter === 'no'){
-            queue.peers = new Array;
-            queue.users = new Array;
+            queue.peers = [];
+            queue.users = [];
             angular.forEach($scope.modelPeers.lists.peersSelected, function(peer, index) {
                 queue.peers.push(peer.id);
             });
         }
         else{
-            queue.users = new Array;
-            queue.peers = new Array;
+            queue.users = [];
+            queue.peers = [];
             angular.forEach($scope.modelUsers.lists.usersSelected, function(user, index) {
                 queue.users.push(user.id);
             });
         }
 
-        queue.customRulesBefore = new Array;
+        queue.customRulesBefore = [];
         angular.forEach($scope.modelIvrs.lists.ivrsSelectedBefore, function(ivr, index) {
             queue.customRulesBefore.push(ivr.id);
         });
 
-        queue.customRulesAfter = new Array;
+        queue.customRulesAfter = [];
         angular.forEach($scope.modelIvrs.lists.ivrsSelectedAfter, function(ivr, index) {
             queue.customRulesAfter.push(ivr.id);
         });
 
         return queue;
-    }
+    };
 });

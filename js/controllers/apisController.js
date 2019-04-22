@@ -3,8 +3,8 @@ angular.module("nativeIP").controller("apisController", function ($scope, api, a
     if(api){
         $scope.api = api.data;
         if(!$scope.api.headers){
-            $scope.api.headers = new Array;
-            $scope.api.headers.push({key: "", value: ""})
+            $scope.api.headers = [];
+            $scope.api.headers.push({key: "", value: ""});
         }
     }
 
@@ -38,7 +38,7 @@ angular.module("nativeIP").controller("apisController", function ($scope, api, a
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -71,7 +71,7 @@ angular.module("nativeIP").controller("apisController", function ($scope, api, a
             $scope.apis.filter(function (api){
                 if (api.id === apiCall.apiId){
                     apiCall.apiName = api.name;
-                };
+                }
             });
         });
     }
@@ -101,22 +101,22 @@ angular.module("nativeIP").controller("apisController", function ($scope, api, a
     $scope.editApiCall = function (apiCall) {
         apiCall.action = "edit";
         $scope.apiCallNew = apiCall;
-    }
+    };
 
     $scope.createApiCall = function() {
         $scope.apiCallNew = {action: "new"};
-    }
+    };
 
     $scope.saveApiCall = function (apiCall) {
         $scope.apis.filter(function (api){
             if (api.id === apiCall.apiId){
                 apiCall.apiName = api.name;
-            };
+            }
         });
         apiCall.body = JSON.stringify(apiCall.fields);
         if(apiCall.action === 'new'){
             if(!$scope.apiCalls){
-                $scope.apiCalls = new Array;
+                $scope.apiCalls = [];
             }
             var newApiCall = apisCallsAPI.saveApisCalls(apiCall);
             apiCall.id = newApiCall.id;
@@ -126,22 +126,22 @@ angular.module("nativeIP").controller("apisController", function ($scope, api, a
             apisCallsAPI.updateApiCall(apiCall.id, apiCall);
         }
         $scope.apiCallNew = {};
-    }
+    };
 
     $scope.removeApiCall = function (apiCalls, lineId, apiCall) {
         apiCalls.splice( lineId, 1 );
         apisCallsAPI.deleteApisCalls(apiCall.id);
-    }
+    };
 
     $scope.addFieldToBody = function (apiCall) {
         if(!apiCall.fields){
-            apiCall.fields = new Array;
+            apiCall.fields = [];
         }
 
         apiCall.fields.push({key: "", value: ""});
-    }
+    };
     
     $scope.removeFieldFromBody = function (fields, lineId) {
         fields.splice( lineId, 1 );
-    }
+    };
 });

@@ -2,7 +2,7 @@ angular.module("nativeIP").controller("groupsController", function ($scope, grou
 
     if(group){
         $scope.group = group.data;
-        $scope.peers = new Array;
+        $scope.peers = [];
         angular.forEach(peers.data, function(peer){
             angular.forEach(peer.Groups, function(peerGroup){
                 if(peerGroup.id === $scope.group.id){
@@ -23,7 +23,7 @@ angular.module("nativeIP").controller("groupsController", function ($scope, grou
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 

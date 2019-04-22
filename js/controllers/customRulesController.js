@@ -64,17 +64,18 @@ angular.module("nativeIP").controller("customRulesController", function ($scope,
                     objDetail.endDay = objParameters.endDay;
                     objDetail.startMonth = objParameters.startMonth;
                     objDetail.endMonth = objParameters.endMonth;
+                    var timezone;
                     if(objParameters.startTime){
                         var arrStarttime = objParameters.startTime.split(":");
                         var startTime = new Date(1970, 0, 1, arrStarttime[0], arrStarttime[1], 0);
-                        var timezone = startTime.getTimezoneOffset()/60;
+                        timezone = startTime.getTimezoneOffset()/60;
                         var startTimeNew = new Date(1970, 0, 1, arrStarttime[0]-timezone, arrStarttime[1], 0);
                         objDetail.startTime = startTimeNew;
                     }
                     if(objParameters.endTime){
                         var arrEndtime = objParameters.endTime.split(":");
                         var endTime = new Date(1970, 0, 1, arrEndtime[0], arrEndtime[1], 0);
-                        var timezone = endTime.getTimezoneOffset()/60;
+                        timezone = endTime.getTimezoneOffset()/60;
                         var endTimeNew = new Date(1970, 0, 1, arrEndtime[0]-timezone, arrEndtime[1], 0);
                         objDetail.endTime = endTimeNew;
                     }
@@ -130,13 +131,13 @@ angular.module("nativeIP").controller("customRulesController", function ($scope,
                 }, function (error) {
                     $scope.returnStatus = error.status;
                 });
-            };
+            }
         });
     };
 
     var loadCustomRules = function () {
         ivrsAPI.getIvrs().then(function (response) {
-            $scope.customRules = new Array;
+            $scope.customRules = [];
             angular.forEach(response.data, function(ivr){
                 if(ivr.type === 'customRule'){
                     $scope.customRules.push(ivr);
@@ -190,7 +191,7 @@ angular.module("nativeIP").controller("customRulesController", function ($scope,
 
     var setDetails = function(customRule){
         customRule.type = "customRule";
-        customRule.ivrDetails = new Array;
+        customRule.ivrDetails = [];
         angular.forEach($scope.modelCommands.lists.definition, function(detail){
             var newdetail = {command: detail.type, line: detail.label, parameters: ""};
 
@@ -212,7 +213,7 @@ angular.module("nativeIP").controller("customRulesController", function ($scope,
                 case "playback":
                     parameters = {
                         file: detail.file.name,
-                    }
+                    };
                     break;
                 case "read":
                     parameters = {
@@ -220,10 +221,10 @@ angular.module("nativeIP").controller("customRulesController", function ($scope,
                         readDigits:detail.readDigits,
                         readVariable: detail.readVariable,
                         file: detail.file.name,
-                    }
+                    };
                     break;
                 case "timeCondition":
-                    var parameterDows = new Array;
+                    var parameterDows = [];
                     angular.forEach(detail.dows, function(dow, dowKey){
                         if(dow.checked){
                             parameterDows.push(dowKey);
@@ -251,27 +252,27 @@ angular.module("nativeIP").controller("customRulesController", function ($scope,
             customRule.ivrDetails.push(newdetail);
         });
         return customRule;
-    }
+    };
 
     $scope.addCondition = function (group, condition) {
         group.splice((group.indexOf(condition)+1), 0, {"conditionVariable":"","conditionOperator":"","conditionValue":"","logicalOperator":""} );
-    }
+    };
 
     $scope.removeCondition = function (group, condition) {
         group.splice( group.indexOf(condition), 1 );
-    }
+    };
 
     $scope.addGroup = function (groups, group) {
         groups.splice( (groups.indexOf(group)+1), 0, {conditionGroup: [{conditionVariable: "", conditionOperator: "", conditionValue: "", logicalOperator: ""}], logicalOperator: ""} );
-    }
+    };
 
     $scope.removeGroup = function (groups, group) {
         groups.splice( groups.indexOf(group), 1 );
-    }
+    };
 
     $scope.removeCommand = function(array, item){
         array.splice(item,1);
-    }
+    };
 
     $scope.uploadFile = function (currentFile, item) {
         var file = currentFile;
@@ -288,7 +289,7 @@ angular.module("nativeIP").controller("customRulesController", function ($scope,
         });
 
         promise.then(function (response) {
-            item.file = {'name': currentFile.name, 'new': true}
+            item.file = {'name': currentFile.name, 'new': true};
         }, function (error) {
             console.log(error);
             $scope.serverResponse = 'An error has occurred';

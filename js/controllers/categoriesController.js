@@ -15,7 +15,7 @@ angular.module("nativeIP").controller("categoriesController", function ($scope, 
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 

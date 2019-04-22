@@ -42,7 +42,7 @@ angular.module("nativeIP").controller("callbacksController", function ($scope, c
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -91,5 +91,5 @@ angular.module("nativeIP").controller("callbacksController", function ($scope, c
 
     $scope.emptyDestination = function (callback) {
         delete callback.destination;
-    }
+    };
 });

@@ -6,8 +6,8 @@ angular.module("nativeIP").controller("serviceHoursController", function ($scope
         angular.forEach($scope.queues, function(queue){
             queue.checked = false;
         });
-        $scope.ivrs = new Array;
-        $scope.customRules = new Array;
+        $scope.ivrs = [];
+        $scope.customRules = [];
         angular.forEach(ivrs.data, function(ivr){
             if(ivr.type === 'customRule'){
                 $scope.customRules.push({id: ivr.id, name: ivr.name});
@@ -19,8 +19,8 @@ angular.module("nativeIP").controller("serviceHoursController", function ($scope
     }
 
     if(!serviceHour){
-        $scope.serviceHour = new Object;
-        $scope.serviceHour.serviceHoursDetails = new Array;
+        $scope.serviceHour = {};
+        $scope.serviceHour.serviceHoursDetails = [];
         $scope.serviceHour.serviceHoursDetails.push({startTimeTmp: "", endTimeTmp: "", dowsTmp: [
             {id: "mon", name: "Seg", checked: false},
             {id: "tue", name: "Ter", checked: false},
@@ -37,7 +37,7 @@ angular.module("nativeIP").controller("serviceHoursController", function ($scope
         delete serviceHour.data.ServiceHoursDetails;
         $scope.serviceHour = serviceHour.data;
 
-        $scope.serviceHour.serviceHoursDetails = new Array;
+        $scope.serviceHour.serviceHoursDetails = [];
         angular.forEach(details, function(detail){
             var arrStart = detail.startTime.split(":");
             var startTime = new Date(Date.UTC(70, 0, 1, arrStart[0], arrStart[1], 0));
@@ -103,7 +103,7 @@ angular.module("nativeIP").controller("serviceHoursController", function ($scope
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -172,8 +172,8 @@ angular.module("nativeIP").controller("serviceHoursController", function ($scope
             serviceHour.sendTo = "hangup";
         }
 
-        serviceHour.ivrs = new Array;
-        serviceHour.queues = new Array;
+        serviceHour.ivrs = [];
+        serviceHour.queues = [];
         angular.forEach($scope.ivrs, function(ivr){
             if(ivr.checked){
                 serviceHour.ivrs.push(ivr.id);
@@ -192,7 +192,7 @@ angular.module("nativeIP").controller("serviceHoursController", function ($scope
             delete detail.startTimeFmt;
             delete detail.endTimeFmt;
 
-            detail.dows = new Array;
+            detail.dows = [];
 
             angular.forEach(detail.dowsTmp, function(dow){
                 if(dow.checked){
@@ -207,11 +207,11 @@ angular.module("nativeIP").controller("serviceHoursController", function ($scope
         });
 
         return serviceHour;
-    }
+    };
 
     $scope.emptySendToValue = function (){
         $scope.serviceHour.sendToValue = "";
-    }
+    };
 
     $scope.addDetail = function (detail){
         var newDetail = {startTime: "", endTime: "", dowsTmp: [
@@ -224,9 +224,9 @@ angular.module("nativeIP").controller("serviceHoursController", function ($scope
             {id: "sun", name: "Dom", checked: false},
         ]};
         $scope.serviceHour.serviceHoursDetails.splice(($scope.serviceHour.serviceHoursDetails.indexOf(detail)+1),0, newDetail);
-    }
+    };
 
     $scope.removeDetail = function (detail) {
         $scope.serviceHour.serviceHoursDetails.splice( $scope.serviceHour.serviceHoursDetails.indexOf(detail), 1 );
-    }
+    };
 });

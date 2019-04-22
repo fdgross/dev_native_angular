@@ -103,7 +103,7 @@ angular.module("nativeIP").controller("usersController", function ($scope, user,
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -135,12 +135,12 @@ angular.module("nativeIP").controller("usersController", function ($scope, user,
         else{
             $scope.user.avatar = "";
         }
-    }
+    };
 
     $scope.checkReportsSelected = function (permission) {
         if (permission.name === 'reports'){
             $scope.reportsSelected = permission.checked;
-        };
+        }
     };
 
     $scope.addUser = function (user) {
@@ -178,14 +178,14 @@ angular.module("nativeIP").controller("usersController", function ($scope, user,
     };
 
     var setPermissionsCostCenter = function (user) {
-        user.permissions = new Array;
+        user.permissions = [];
         angular.forEach($scope.permissions, function(permission, index) {
             if((permission.checked) && 
                 ((permission.name !== 'cockpit') || ((user.peerId) && (permission.name === 'cockpit')))) {
                 user.permissions.push(permission.id);
             }
             if (permission.name === 'reports'){
-                user.costCenters = new Array;
+                user.costCenters = [];
                 angular.forEach($scope.costCenters, function(costCenter, index) {
                     if(costCenter.checked) {
                         user.costCenters.push(costCenter.id);
@@ -194,5 +194,5 @@ angular.module("nativeIP").controller("usersController", function ($scope, user,
             }
         });
         return user;
-    }
+    };
 });

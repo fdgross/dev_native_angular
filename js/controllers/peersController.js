@@ -73,7 +73,7 @@ angular.module("nativeIP").controller("peersController", function ($scope, peer,
                     peersAPI.deletePeers(peer.id).then(function (){
                         loadPeers();
                     });
-                };
+                }
             });
         };
 
@@ -130,12 +130,12 @@ angular.module("nativeIP").controller("peersController", function ($scope, peer,
             peer.costCenterId = peer.costCenter.id;
             delete peer.costCenter;
         }
-        peer.groups = new Array;
+        peer.groups = [];
         angular.forEach($scope.groups, function(group, index) {
             if(group.checked) {
                 peer.groups.push(group.id);
             }
         });
         return peer;
-    }
+    };
 });

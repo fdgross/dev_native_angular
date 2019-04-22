@@ -6,8 +6,8 @@ angular.module("nativeIP").controller("outRoutesController", function ($scope, o
     $scope.trunks = trunks.data;
 
     if(!outRoute){
-        $scope.outRoute = new Object;
-        $scope.outRoute.outRoutesDetails = new Array;
+        $scope.outRoute = {};
+        $scope.outRoute.outRoutesDetails = [];
         $scope.outRoute.outRoutesDetails.push({mask: "", add: "", remove: "", destinationType: "", destination: "", enabled: true});
     }
 
@@ -35,7 +35,7 @@ angular.module("nativeIP").controller("outRoutesController", function ($scope, o
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -85,11 +85,11 @@ angular.module("nativeIP").controller("outRoutesController", function ($scope, o
     $scope.addDetail = function (detail){
         var newDetail = {mask: "", add: "", remove: "", destinationType: "", destination: ""};
         $scope.outRoute.outRoutesDetails.splice(($scope.outRoute.outRoutesDetails.indexOf(detail)+1),0, newDetail);
-    }
+    };
 
     $scope.removeDetail = function (detail) {
         $scope.outRoute.outRoutesDetails.splice( $scope.outRoute.outRoutesDetails.indexOf(detail), 1 );
-    }
+    };
 
     $scope.changeMask = function (detail){
         detail.mask = "";
@@ -117,24 +117,24 @@ angular.module("nativeIP").controller("outRoutesController", function ($scope, o
                 break;
         }
 
-    }
+    };
 
     $scope.addOverflowDetail = function (detail, overflowDetail){
         var newDetail = {busy: false, fail: false, trunkLimit: false, trunkId: ""};
         detail.overflows.splice((detail.overflows.indexOf(overflowDetail)+1),0, newDetail);
-    }
+    };
 
     $scope.removeOverflowDetail = function (detail, overflowDetail) {
         detail.overflows.splice( detail.overflows.indexOf(overflowDetail), 1 );
-    }
+    };
 
     $scope.createOverflow = function (detail){
         if(!detail.overflows){
-            var overflow = new Array;
+            var overflow = [];
             overflow.push({busy: false, fail: false, trunkLimit: false, trunkId: ""});
             detail.overflows = overflow;
         }
-    }
+    };
 
     $scope.removeOverflow = function (detail){
         detail.overflows = detail.overflows.filter(function(value){
@@ -143,5 +143,5 @@ angular.module("nativeIP").controller("outRoutesController", function ($scope, o
         if(!detail.overflows.length){
             delete detail.overflows;
         }
-    }
+    };
 });

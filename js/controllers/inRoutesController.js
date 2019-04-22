@@ -9,8 +9,8 @@ angular.module("nativeIP").controller("inRoutesController", function ($scope, in
     $scope.callbacks = callbacks.data;
 
     if(!inRoute){
-        $scope.inRoute = new Object;
-        $scope.inRoute.inRoutesDetails = new Array;
+        $scope.inRoute = {};
+        $scope.inRoute.inRoutesDetails = [];
         $scope.inRoute.inRoutesDetails.push({mask: "", add: "", remove: "", destinationType: "", destination: ""});
     }
 
@@ -41,7 +41,7 @@ angular.module("nativeIP").controller("inRoutesController", function ($scope, in
                     }, function (error) {
                         $scope.returnStatus = error.status;
                     });
-                };
+                }
             });
         };
 
@@ -91,14 +91,14 @@ angular.module("nativeIP").controller("inRoutesController", function ($scope, in
     $scope.addDetail = function (detail){
         var newDetail = {mask: "", add: "", remove: "", destinationType: "", destination: ""};
         $scope.inRoute.inRoutesDetails.splice(($scope.inRoute.inRoutesDetails.indexOf(detail)+1),0, newDetail);
-    }
+    };
 
     $scope.removeDetail = function (detail) {
         $scope.inRoute.inRoutesDetails.splice( $scope.inRoute.inRoutesDetails.indexOf(detail), 1 );
-    }
+    };
 
     $scope.emptyDestination = function (detail){
         detail.destination = "";
-    }
+    };
 
 });
