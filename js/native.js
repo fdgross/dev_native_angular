@@ -15,6 +15,8 @@ function run($rootScope, $http, $location, $window) {
             $rootScope.loggedUserUsername = $window.localStorage.loggedUserUsername;
             $rootScope.loggedUserAvatar = $window.localStorage.loggedUserAvatar;
             $rootScope.loggedUserPermissions = $window.localStorage.loggedUserPermissions;
+            $rootScope.loggedUserCallcenter = $window.localStorage.loggedUserCallcenter;
+            $rootScope.loggedUserAdmin = $window.localStorage.loggedUserAdmin;
         }
 
         if (restrictArea && !$window.localStorage.loggedUserUsername) {

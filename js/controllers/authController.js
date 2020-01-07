@@ -10,7 +10,9 @@ angular.module("nativeIP").controller("authController", function ($scope, $rootS
             $window.localStorage.loggedUserName = response.data.user.name;
             $window.localStorage.loggedUserUsername = response.data.user.username;
             $window.localStorage.loggedUserAdmin = response.data.user.administrator;
+            $window.localStorage.loggedUserCallcenter = response.data.user.callcenter;
             $window.localStorage.loggedUserPermissions = response.data.user.permissions;
+
             if(response.data.user.avatar){
                 $window.localStorage.loggedUserAvatar = response.data.user.avatar;
             }
@@ -22,7 +24,8 @@ angular.module("nativeIP").controller("authController", function ($scope, $rootS
             $rootScope.loggedUserPermissions = response.data.user.permissions;
             $rootScope.loggedUserAvatar = $window.localStorage.loggedUserAvatar;
             $rootScope.loggedUserAdmin = response.data.user.administrator;
-            
+            $rootScope.loggedUserCallcenter = response.data.user.callcenter;
+
             $location.path("/serverInfo");
         }, function (error){
             user.error = true;

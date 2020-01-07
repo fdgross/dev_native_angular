@@ -28,6 +28,10 @@
         </div>
         <div class="sidebar-menu">
             <ul>
+                
+                <li class="header-menu" ng-if="loggedUserPermissions.length > 0">
+                    <span>Configurações</span>
+                </li>
                 <li>
                     <a href="#!/contacts" ng-if="loggedUserPermissions.indexOf('contacts') !== -1">
                         <i class="fa fa-address-book"></i>

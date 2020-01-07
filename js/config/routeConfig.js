@@ -1428,6 +1428,22 @@ angular.module("nativeIP").config(function ($routeProvider){
      */
 
     /**
+     * ROUTER FOR CALLCENTER SUPERVISOR DASHBOARD
+     */
+    $routeProvider.when("/callcenterDashboard", {
+        templateUrl: "view/callcenterDashboard.html",
+        controller: "callCenterDashboardController",
+        resolve: {
+            peers: function (peersAPI) {
+                return peersAPI.getPeers();
+            }
+        }
+    });
+    /**
+     * END ROUTER FOR COCKPIT
+     */
+
+    /**
      * TODO: alterar para index
      * 
      * DEFAULT ROUTER
